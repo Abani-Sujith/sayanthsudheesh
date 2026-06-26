@@ -1,0 +1,134 @@
+/* ============================================================
+   UNIFIED PORTFOLIO GALLERY SYSTEM
+   One reusable layout system for all category pages.
+   Masonry-style CSS Grid — matches Nature section's logic.
+   ============================================================ */
+
+/* --- Grid Container --- */
+.pg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    grid-auto-rows: 200px;
+    gap: 4px;
+    width: 100%;
+}
+
+/* --- Grid Items --- */
+.pg-item {
+    position: relative;
+    overflow: hidden;
+    background-color: var(--pg-bg, #121200);
+    cursor: pointer;
+}
+
+/* --- Images --- */
+.pg-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+    will-change: transform;
+}
+
+.pg-item:hover img {
+    transform: scale(1.05);
+}
+
+/* --- Caption Overlay --- */
+.pg-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 32px 20px 20px 20px;
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+}
+
+.pg-item:hover .pg-caption {
+    opacity: 1;
+}
+
+.pg-caption-label {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 4px;
+    display: block;
+}
+
+.pg-caption-title {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.92);
+    display: block;
+}
+
+/* --- Row Span Classes (vertical height multipliers) --- */
+.pg-v2 { grid-row: span 2; }   /* 404px */
+.pg-v3 { grid-row: span 3; }   /* 608px */
+.pg-v4 { grid-row: span 4; }   /* 812px */
+
+/* --- Column Span Classes --- */
+.pg-h2 { grid-column: span 2; }
+
+/* --- Scroll-in Animation --- */
+@keyframes pgFadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.pg-item.pg-visible {
+    animation: pgFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+/* Stagger delay per item */
+.pg-item:nth-child(1)  { animation-delay: 0.0s; }
+.pg-item:nth-child(2)  { animation-delay: 0.06s; }
+.pg-item:nth-child(3)  { animation-delay: 0.12s; }
+.pg-item:nth-child(4)  { animation-delay: 0.18s; }
+.pg-item:nth-child(5)  { animation-delay: 0.24s; }
+.pg-item:nth-child(6)  { animation-delay: 0.30s; }
+.pg-item:nth-child(7)  { animation-delay: 0.36s; }
+.pg-item:nth-child(8)  { animation-delay: 0.42s; }
+
+/* --- Tablet breakpoint (768–1023px) --- */
+@media (max-width: 1023px) {
+    .pg-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+    .pg-h2 { grid-column: span 1; }
+    .pg-v4 { grid-row: span 3; }
+}
+
+/* --- Mobile breakpoint (< 768px) --- */
+@media (max-width: 767px) {
+    .pg-grid {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+        gap: 2px;
+    }
+    /* All span overrides collapse on mobile */
+    .pg-h2,
+    .pg-v2,
+    .pg-v3,
+    .pg-v4 {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+    /* Fixed height for mobile cells */
+    .pg-item {
+        height: 260px;
+    }
+    /* Full-width statement items get taller on mobile */
+    .pg-item.pg-h2 {
+        height: 220px;
+    }
+}

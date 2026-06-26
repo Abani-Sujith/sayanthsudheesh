@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collection Showcase | SAYANTH SUDHEESH</title>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "bg-deep": "#0a0a00",
+                        "bg-surface": "#111100",
+                        "accent-cream": "#FFFFCC",
+                        "accent-dim": "rgba(255,255,204,0.6)",
+                        "accent-ghost": "rgba(255,255,204,0.15)",
+                        "glass-border": "rgba(255,255,204,0.08)",
+                    },
+                    fontFamily: {
+                        "serif": ["Libre Caslon Text", "serif"],
+                        "sans": ["Hanken Grotesk", "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+    /* ── Custom Cursor ── */
+  * { cursor: none !important; }
+  .cur-dot {
+    width: 7px; height: 7px; background: #fff; border-radius: 50%;
+    position: fixed; pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .18s ease, height .18s ease;
+  }
+  .cur-ring {
+    width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,.55);
+    border-radius: 50%; position: fixed;
+    pointer-events: none; z-index: 9998; mix-blend-mode: difference;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .35s cubic-bezier(.16,1,.3,1),
+                height .35s cubic-bezier(.16,1,.3,1), background .35s ease;
+  }
+  .cur-dot.on  { opacity: 1; }
+  .cur-ring.on { opacity: 1; }
+  .cur-dot.hov  { width: 5px; height: 5px; }
+  .cur-ring.hov { width: 56px; height: 56px; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+  .cur-ring.dn  { width: 24px; height: 24px; background: rgba(255,255,255,.13); }
+        :root {
+            --cream: #FFFFCC;
+            --bg: #0d0d00;
+            --bg-mid: #111100;
+            --bg-card: #161600;
+            --glass: rgba(255,255,204,0.04);
+            --glass-border: rgba(255,255,204,0.08);
+            --glass-hover: rgba(255,255,204,0.07);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg);
+            color: var(--cream);
+            font-family: 'Hanken Grotesk', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* ─── Page Transitions ─── */
+        #page-transition {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 1000;
+            pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        #page-transition.fade-out { opacity: 0; }
+
+        /* ─── Skeleton Loaders ─── */
+        .skeleton {
+            background: linear-gradient(90deg, rgba(255,255,204,0.04) 25%, rgba(255,255,204,0.09) 50%, rgba(255,255,204,0.04) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.8s infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ─── Hero ─── */
+        #hero-container {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            min-height: 480px;
+            overflow: hidden;
+        }
+        #hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 12s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.8s ease;
+            transform: scale(1.08);
+        }
+        #hero-img.loaded { transform: scale(1.0); }
+        #hero-gradient {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(10,10,0,0.2) 0%,
+                transparent 30%,
+                transparent 50%,
+                rgba(10,10,0,0.7) 80%,
+                rgba(10,10,0,1) 100%
+            );
+        }
+        #hero-overlay-left {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, rgba(10,10,0,0.6) 0%, transparent 50%);
+        }
+        .hero-skeleton {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            transition: opacity 0.5s ease;
+        }
+        .hero-skeleton.hidden { opacity: 0; pointer-events: none; }
+
+        /* ─── Glassmorphism Cards ─── */
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .glass-card:hover {
+            background: var(--glass-hover);
+            border-color: rgba(255,255,204,0.15);
+            transform: translateY(-2px);
+        }
+
+        /* ─── Horizontal Carousel ─── */
+        #carousel-track {
+            display: flex;
+            gap: 12px;
+            padding: 8px 4px 12px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            cursor: grab;
+            user-select: none;
+        }
+        #carousel-track:active { cursor: grabbing; }
+        #carousel-track::-webkit-scrollbar { display: none; }
+
+        .carousel-item {
+            flex: 0 0 260px;
+            height: 180px;
+            scroll-snap-align: start;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        @media (max-width: 640px) {
+            .carousel-item { flex: 0 0 200px; height: 140px; }
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.19,1,0.22,1), filter 0.4s ease;
+            filter: brightness(0.75);
+        }
+        .carousel-item:hover img {
+            transform: scale(1.08);
+            filter: brightness(1);
+        }
+        .carousel-item.active {
+            border-color: rgba(255,255,204,0.5);
+            box-shadow: 0 0 20px rgba(255,255,204,0.1);
+        }
+        .carousel-item.active img { filter: brightness(1); }
+        .carousel-item-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .carousel-item:hover .carousel-item-overlay { opacity: 1; }
+        .carousel-item-label {
+            position: absolute;
+            bottom: 8px;
+            left: 10px;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            font-weight: 600;
+            color: rgba(255,255,204,0.9);
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.3s ease;
+        }
+        .carousel-item:hover .carousel-item-label,
+        .carousel-item.active .carousel-item-label { opacity: 1; transform: translateY(0); }
+
+        /* ─── Related Grid ─── */
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        @media (max-width: 768px) {
+            .related-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .related-grid { grid-template-columns: 1fr; }
+        }
+        .related-item {
+            position: relative;
+            aspect-ratio: 4/3;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .related-item:hover {
+            border-color: rgba(255,255,204,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            transform: scale(1.02);
+            z-index: 2;
+        }
+        .related-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s cubic-bezier(0.19,1,0.22,1);
+            filter: brightness(0.8) saturate(0.9);
+        }
+        .related-item:hover img {
+            transform: scale(1.1);
+            filter: brightness(1) saturate(1);
+        }
+        .related-item-info {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 55%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 14px;
+        }
+        .related-item:hover .related-item-info { opacity: 1; }
+
+        /* ─── Action Buttons ─── */
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--cream);
+            font-family: 'Hanken Grotesk', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            backdrop-filter: blur(8px);
+            text-decoration: none;
+        }
+        .action-btn:hover {
+            background: rgba(255,255,204,0.12);
+            border-color: rgba(255,255,204,0.35);
+            transform: translateY(-1px);
+        }
+        .action-btn.liked {
+            background: rgba(255,100,100,0.15);
+            border-color: rgba(255,100,100,0.4);
+            color: #ffaaaa;
+        }
+        .btn-primary {
+            background: var(--cream);
+            color: var(--bg);
+            border-color: var(--cream);
+            font-weight: 700;
+        }
+        .btn-primary:hover {
+            background: rgba(255,255,204,0.85);
+            border-color: rgba(255,255,204,0.85);
+            color: var(--bg);
+            box-shadow: 0 8px 24px rgba(255,255,204,0.2);
+        }
+
+        /* ─── Tag Pills ─── */
+        .tag-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,204,0.7);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .tag-pill:hover {
+            background: rgba(255,255,204,0.08);
+            border-color: rgba(255,255,204,0.25);
+            color: var(--cream);
+        }
+
+        /* ─── Scroll progress ─── */
+        #scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--cream);
+            width: 0%;
+            z-index: 200;
+            transition: width 0.1s linear;
+            opacity: 0.6;
+        }
+
+        /* ─── Nav ─── */
+        .nav-link {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: rgba(255,255,204,0.6);
+            text-decoration: none;
+            transition: color 0.3s ease, opacity 0.3s ease;
+        }
+        .nav-link:hover { color: var(--cream); }
+
+        /* ─── Section fade-in ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1), transform 0.8s cubic-bezier(0.4,0,0.2,1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* ─── Like pulse ─── */
+        @keyframes like-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.4); }
+            100% { transform: scale(1); }
+        }
+        .like-pulse { animation: like-pulse 0.3s ease; }
+
+        /* ─── Image counter badge ─── */
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            background: rgba(255,255,204,0.1);
+            border: 1px solid rgba(255,255,204,0.2);
+            font-size: 10px;
+            font-weight: 700;
+            border-radius: 50%;
+            color: var(--cream);
+        }
+
+        /* ─── Section divider ─── */
+        .section-divider {
+            width: 40px;
+            height: 1px;
+            background: rgba(255,255,204,0.2);
+            margin: 16px 0;
+        }
+
+        /* ─── Carousel arrows ─── */
+        .carousel-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: rgba(255,255,204,0.6);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+        }
+        .carousel-arrow:hover {
+            border-color: rgba(255,255,204,0.3);
+            color: var(--cream);
+            background: rgba(255,255,204,0.08);
+        }
+
+        /* ─── Tooltip ─── */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: rgba(30,30,0,0.95);
+            border: 1px solid rgba(255,255,204,0.2);
+            color: var(--cream);
+            padding: 10px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            z-index: 500;
+            backdrop-filter: blur(12px);
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ─── Mobile nav overlay ─── */
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Page transition overlay -->
+    <div id="page-transition"></div>
+
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- ─── Top Navigation ─── -->
+    <header id="site-nav" class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-16 py-6 transition-all duration-500" style="mix-blend-mode: normal;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(10,10,0,0.8),transparent);pointer-events:none;opacity:0;transition:opacity 0.5s" id="nav-bg"></div>
+        <a href="index.html" class="font-serif text-sm font-bold tracking-widest text-[#FFFFCC] relative z-10" style="font-size:12px;letter-spacing:0.15em;">SAYANTH SUDHEESH</a>
+        <nav class="hidden md:flex items-center gap-8 relative z-10">
+            <a href="works.html" class="nav-link" style="color:rgba(255,255,204,0.9);border-bottom:1px solid rgba(255,255,204,0.5);padding-bottom:2px;">Works</a>
+            <a href="index.html#about" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <div class="flex items-center gap-4 relative z-10">
+            <a href="contact.html" class="hidden md:inline-block action-btn" style="padding:10px 20px;">Let's Create</a>
+            <button id="menu-btn" class="text-[#FFFFCC] md:hidden focus:outline-none">
+                <span class="material-symbols-outlined" style="font-size:28px;">menu</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="fixed inset-0 z-[100] bg-[#0a0a00] flex flex-col justify-center items-center gap-10 translate-x-full">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-[#FFFFCC]/60 hover:text-[#FFFFCC] transition-colors">
+            <span class="material-symbols-outlined" style="font-size:28px;">close</span>
+        </button>
+        <a href="works.html" class="font-serif text-4xl text-[#FFFFCC] hover:italic transition-all">Works</a>
+        <a href="index.html#about" class="font-serif text-4xl text-[#FFFFCC] hover:italic transition-all">About</a>
+        <a href="contact.html" class="font-serif text-4xl text-[#FFFFCC] hover:italic transition-all">Contact</a>
+    </div>
+
+    <!-- ─── Hero Section ─── -->
+    <section id="hero-container">
+        <!-- Skeleton loader -->
+        <div class="hero-skeleton skeleton" id="hero-skeleton"></div>
+
+        <img id="hero-img" src="" alt="" loading="eager">
+        <div id="hero-gradient"></div>
+        <div id="hero-overlay-left"></div>
+
+        <!-- Hero content overlaid -->
+        <div class="absolute bottom-0 left-0 w-full px-6 md:px-16 pb-12 z-10">
+            <!-- Back button -->
+            <a id="back-link" href="#" class="inline-flex items-center gap-2 nav-link mb-6 opacity-60 hover:opacity-100 transition-opacity">
+                <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+                <span style="font-size:11px;letter-spacing:0.12em;">Back to Gallery</span>
+            </a>
+
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                    <!-- Category tags -->
+                    <div class="flex flex-wrap gap-2 mb-4" id="hero-tags">
+                        <span class="tag-pill skeleton" style="width:80px;height:24px;"></span>
+                        <span class="tag-pill skeleton" style="width:60px;height:24px;"></span>
+                    </div>
+
+                    <h1 id="hero-title" class="font-serif text-4xl md:text-6xl leading-none mb-3" style="letter-spacing:-0.02em;opacity:0;transform:translateY(16px);transition:all 0.8s cubic-bezier(0.4,0,0.2,1) 0.2s;">
+                        Loading...
+                    </h1>
+
+                    <div class="flex items-center gap-4 text-xs font-sans font-semibold tracking-widest" style="color:rgba(255,255,204,0.5);opacity:0;transform:translateY(12px);transition:all 0.8s cubic-bezier(0.4,0,0.2,1) 0.4s;" id="hero-meta">
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined" style="font-size:14px;">location_on</span>
+                            <span id="hero-location">—</span>
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <span class="material-symbols-outlined" style="font-size:14px;">camera</span>
+                            <span id="hero-camera">—</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Counter -->
+                <div class="flex items-center gap-3" style="opacity:0;transition:opacity 0.8s ease 0.5s;" id="hero-counter">
+                    <span class="font-sans font-semibold" style="font-size:36px;color:var(--cream);" id="hero-index-display">01</span>
+                    <div style="width:1px;height:40px;background:rgba(255,255,204,0.15)"></div>
+                    <span class="font-sans" style="font-size:13px;color:rgba(255,255,204,0.3);" id="hero-total-display">07</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ─── Main Content ─── -->
+    <main class="px-6 md:px-16 py-12 max-w-screen-xl mx-auto">
+
+        <!-- ─── Action Bar ─── -->
+        <div class="reveal flex flex-wrap items-center justify-between gap-4 mb-14">
+            <div class="flex flex-wrap gap-3">
+                <button id="btn-like" class="action-btn" onclick="toggleLike()">
+                    <span class="material-symbols-outlined" style="font-size:18px;" id="like-icon">favorite_border</span>
+                    <span id="like-label">Save</span>
+                </button>
+                <button class="action-btn" onclick="handleShare()">
+                    <span class="material-symbols-outlined" style="font-size:18px;">ios_share</span>
+                    Share
+                </button>
+                <button class="action-btn" onclick="handleDownload()">
+                    <span class="material-symbols-outlined" style="font-size:18px;">download</span>
+                    Download
+                </button>
+            </div>
+            <a id="detail-link" href="#" class="btn-primary action-btn">
+                <span>Open Full Detail</span>
+                <span class="material-symbols-outlined" style="font-size:16px;">open_in_full</span>
+            </a>
+        </div>
+
+        <!-- ─── Description ─── -->
+        <section class="reveal mb-16">
+            <div class="glass-card" style="padding:28px 32px;max-width:700px;">
+                <p style="font-size:10px;font-weight:600;letter-spacing:0.14em;color:rgba(255,255,204,0.35);text-transform:uppercase;margin-bottom:10px;">About this series</p>
+                <p id="hero-description" class="font-sans" style="font-size:16px;line-height:1.75;color:rgba(255,255,204,0.75);font-weight:300;">
+                    Loading description...
+                </p>
+                <div class="section-divider"></div>
+                <div class="flex flex-wrap gap-2" id="description-tags"></div>
+            </div>
+        </section>
+
+        <!-- ─── Horizontal Carousel ─── -->
+        <section class="reveal mb-16">
+            <div class="flex items-center justify-between mb-5">
+                <div class="flex items-center gap-3">
+                    <h2 class="font-sans font-semibold tracking-widest" style="font-size:11px;text-transform:uppercase;color:rgba(255,255,204,0.5);">From This Collection</h2>
+                    <span class="count-badge" id="carousel-count">—</span>
+                </div>
+                <div class="flex gap-2">
+                    <button class="carousel-arrow" id="carousel-prev" onclick="scrollCarousel(-1)">
+                        <span class="material-symbols-outlined" style="font-size:18px;">chevron_left</span>
+                    </button>
+                    <button class="carousel-arrow" id="carousel-next" onclick="scrollCarousel(1)">
+                        <span class="material-symbols-outlined" style="font-size:18px;">chevron_right</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="carousel-track">
+                <!-- Skeleton items -->
+                <div class="carousel-item skeleton" style="flex:0 0 260px;"></div>
+                <div class="carousel-item skeleton" style="flex:0 0 260px;"></div>
+                <div class="carousel-item skeleton" style="flex:0 0 260px;"></div>
+            </div>
+
+            <!-- Carousel dots -->
+            <div class="flex gap-2 mt-4 justify-center" id="carousel-dots"></div>
+        </section>
+
+        <!-- ─── Related Grid ─── -->
+        <section class="reveal mb-16">
+            <div class="flex items-center gap-3 mb-5">
+                <h2 class="font-sans font-semibold tracking-widest" style="font-size:11px;text-transform:uppercase;color:rgba(255,255,204,0.5);">Related Photographs</h2>
+                <span class="count-badge" id="related-count">—</span>
+            </div>
+
+            <div class="related-grid" id="related-grid">
+                <!-- Skeleton -->
+                <div class="related-item skeleton"></div>
+                <div class="related-item skeleton"></div>
+                <div class="related-item skeleton"></div>
+                <div class="related-item skeleton"></div>
+                <div class="related-item skeleton"></div>
+                <div class="related-item skeleton"></div>
+            </div>
+        </section>
+
+        <!-- ─── CTA Footer ─── -->
+        <section class="reveal">
+            <div class="glass-card" style="padding:40px;text-align:center;position:relative;overflow:hidden;">
+                <div style="position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:200px;background:radial-gradient(circle,rgba(255,255,204,0.04) 0%,transparent 70%);pointer-events:none;"></div>
+                <p style="font-size:10px;font-weight:600;letter-spacing:0.14em;color:rgba(255,255,204,0.3);text-transform:uppercase;margin-bottom:16px;">Ready for the full experience?</p>
+                <h3 class="font-serif" style="font-size:32px;margin-bottom:24px;">Explore every detail.</h3>
+                <a id="detail-link-2" href="#" class="btn-primary action-btn" style="display:inline-flex;margin:0 auto;">
+                    <span class="material-symbols-outlined" style="font-size:18px;">photo_library</span>
+                    Open in Full Detail View
+                    <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ─── Footer ─── -->
+        <footer class="px-6 md:px-16 py-6 border-t mt-16 flex flex-col md:flex-row justify-between items-center gap-4" style="border-color:rgba(255,255,204,0.06);">
+        <div class="font-label-sm text-[10px] font-bold uppercase tracking-widest" style="color:rgba(255,255,204,0.3);">© <span class="copyright-year">2026</span> SAYANTH SUDHEESH</div>
+        <div class="flex flex-wrap justify-center items-center gap-6">
+            <a class="font-label-sm text-[10px] font-semibold uppercase tracking-widest transition-all" style="color:rgba(255,255,204,0.4);" onmouseover="this.style.color='rgba(255,255,204,0.9)'" onmouseout="this.style.color='rgba(255,255,204,0.4)'" href="https://www.instagram.com/_say__nth_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">Instagram</a>
+            <a class="font-label-sm text-[10px] font-semibold uppercase tracking-widest transition-all" style="color:rgba(255,255,204,0.4);" onmouseover="this.style.color='rgba(255,255,204,0.9)'" onmouseout="this.style.color='rgba(255,255,204,0.4)'" href="https://www.linkedin.com/in/sayanth-sudheesh" target="_blank" rel="noopener">LinkedIn</a>
+            <a class="font-label-sm text-[10px] font-semibold uppercase tracking-widest transition-all" style="color:rgba(255,255,204,0.4);" onmouseover="this.style.color='rgba(255,255,204,0.9)'" onmouseout="this.style.color='rgba(255,255,204,0.4)'" href="https://www.behance.net/sayanthsudheesh01" target="_blank" rel="noopener">Behance</a>
+            <a class="font-label-sm text-[10px] font-semibold uppercase tracking-widest transition-all" style="color:rgba(255,255,204,0.4);" onmouseover="this.style.color='rgba(255,255,204,0.9)'" onmouseout="this.style.color='rgba(255,255,204,0.4)'" href="tel:+919074809948">+91 90748 09948</a>
+        </div>
+        <div class="font-label-sm text-[10px] font-semibold uppercase tracking-widest" style="color:rgba(255,255,204,0.3);">All Rights Reserved</div>
+    </footer>
+
+    <script>
+    // ─── State ────────────────────────────────────────────────────────────────
+    // `collections` is populated asynchronously by showcase-loader.js
+    // via window.collectionsReady Promise before DOMContentLoaded fires.
+    const params = new URLSearchParams(window.location.search);
+    let collectionKey = params.get('collection') || 'nature';
+    let currentIndex = parseInt(params.get('index'), 10) || 0;
+    let col; // set after data loads
+
+    let isLiked = false;
+
+    // ─── Init ────────────────────────────────────────────────────────────────
+    window.addEventListener('DOMContentLoaded', async () => {
+        // Wait for showcase-loader.js to populate window.collections
+        await (window.collectionsReady || Promise.resolve());
+
+        const collections = window.collections || {};
+        if (!collections[collectionKey]) collectionKey = 'nature';
+        col = collections[collectionKey];
+        if (!col || !col.images) {
+            console.error('[showcase] No collection data available.');
+            return;
+        }
+        if (currentIndex < 0 || currentIndex >= col.images.length) currentIndex = 0;
+
+        setupNav();
+        initPage();
+        setupMobileMenu();
+        setupScrollProgress();
+        setupRevealObserver();
+
+        // Fade in page
+        setTimeout(() => {
+            document.getElementById('page-transition').classList.add('fade-out');
+        }, 100);
+    });
+
+    function initPage() {
+        const item = col.images[currentIndex];
+
+        // Back link
+        document.getElementById('back-link').href = `${collectionKey}.html`;
+
+        // Detail links
+        const detailHref = `detail.html?collection=${collectionKey}&index=${currentIndex}`;
+        document.getElementById('detail-link').href = detailHref;
+        document.getElementById('detail-link-2').href = detailHref;
+
+        // Detail links — navigate with page transition
+        document.querySelectorAll('#detail-link, #detail-link-2').forEach(el => {
+            el.addEventListener('click', e => {
+                e.preventDefault();
+                navigateTo(detailHref);
+            });
+        });
+
+        // Hero
+        loadHeroImage(item);
+        animateHeroText(item);
+
+        // Description
+        document.getElementById('hero-description').textContent = col.description;
+
+        // Tags
+        buildTags();
+
+        // Carousel
+        buildCarousel();
+
+        // Related grid
+        buildRelatedGrid();
+    }
+
+    function loadHeroImage(item) {
+        const img = document.getElementById('hero-img');
+        const skeleton = document.getElementById('hero-skeleton');
+        img.src = item.src;
+        img.alt = item.title;
+        img.onload = () => {
+            img.classList.add('loaded');
+            skeleton.classList.add('hidden');
+        };
+    }
+
+    function animateHeroText(item) {
+        // Staggered reveals
+        setTimeout(() => {
+            const title = document.getElementById('hero-title');
+            title.textContent = item.title;
+            title.style.opacity = '1';
+            title.style.transform = 'translateY(0)';
+        }, 400);
+
+        setTimeout(() => {
+            const meta = document.getElementById('hero-meta');
+            document.getElementById('hero-location').textContent = item.location;
+            document.getElementById('hero-camera').textContent = item.camera;
+            meta.style.opacity = '1';
+            meta.style.transform = 'translateY(0)';
+        }, 600);
+
+        setTimeout(() => {
+            const counter = document.getElementById('hero-counter');
+            document.getElementById('hero-index-display').textContent = String(currentIndex + 1).padStart(2, '0');
+            document.getElementById('hero-total-display').textContent = String(col.images.length).padStart(2, '0');
+            counter.style.opacity = '1';
+        }, 750);
+
+        // Hero tags
+        setTimeout(() => {
+            const tagsEl = document.getElementById('hero-tags');
+            tagsEl.innerHTML = '';
+            col.tags.slice(0, 3).forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag-pill';
+                span.textContent = tag;
+                tagsEl.appendChild(span);
+            });
+        }, 300);
+    }
+
+    function buildTags() {
+        const el = document.getElementById('description-tags');
+        el.innerHTML = '';
+        col.tags.forEach(tag => {
+            const span = document.createElement('span');
+            span.className = 'tag-pill';
+            span.textContent = tag;
+            el.appendChild(span);
+        });
+    }
+
+    // ─── Carousel ──────────────────────────────────────────────────────────
+    function buildCarousel() {
+        const track = document.getElementById('carousel-track');
+        const dotsEl = document.getElementById('carousel-dots');
+        const countEl = document.getElementById('carousel-count');
+        track.innerHTML = '';
+        dotsEl.innerHTML = '';
+        countEl.textContent = col.images.length;
+
+        col.images.forEach((img, i) => {
+            // Item
+            const div = document.createElement('div');
+            div.className = 'carousel-item' + (i === currentIndex ? ' active' : '');
+            div.innerHTML = `
+                <img src="${img.src}" alt="${img.title}" loading="lazy">
+                <div class="carousel-item-overlay"></div>
+                <span class="carousel-item-label">${img.title}</span>
+            `;
+            div.addEventListener('click', () => selectFromCarousel(i));
+            track.appendChild(div);
+
+            // Dot
+            const dot = document.createElement('div');
+            dot.style.cssText = `width:${i===currentIndex?'20px':'6px'};height:6px;background:rgba(255,255,204,${i===currentIndex?'0.7':'0.2'});border-radius:3px;transition:all 0.3s ease;cursor:pointer;`;
+            dot.addEventListener('click', () => selectFromCarousel(i));
+            dotsEl.appendChild(dot);
+        });
+
+        // Scroll active item into view
+        setTimeout(() => {
+            const activeItem = track.children[currentIndex];
+            if (activeItem) activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }, 100);
+
+        setupCarouselDrag();
+    }
+
+    function selectFromCarousel(index) {
+        // Update active carousel item
+        const items = document.querySelectorAll('.carousel-item');
+        items.forEach((el, i) => el.classList.toggle('active', i === index));
+
+        // Update dots
+        const dots = document.getElementById('carousel-dots').children;
+        Array.from(dots).forEach((dot, i) => {
+            dot.style.width = i === index ? '20px' : '6px';
+            dot.style.background = `rgba(255,255,204,${i === index ? '0.7' : '0.2'})`;
+        });
+
+        // Update hero
+        currentIndex = index;
+        const item = col.images[index];
+        loadHeroImage(item);
+        animateHeroText(item);
+
+        // Update detail links
+        const detailHref = `detail.html?collection=${collectionKey}&index=${currentIndex}`;
+        document.getElementById('detail-link').href = detailHref;
+        document.getElementById('detail-link-2').href = detailHref;
+        document.querySelectorAll('#detail-link, #detail-link-2').forEach(el => {
+            el.onclick = e => { e.preventDefault(); navigateTo(detailHref); };
+        });
+
+        // Update related grid selection
+        const relatedItems = document.querySelectorAll('.related-item');
+        relatedItems.forEach((el, i) => {
+            el.style.outline = i === index ? '2px solid rgba(255,255,204,0.4)' : 'none';
+        });
+
+        // Scroll into view
+        items[index].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+
+    let isDragging = false, startX = 0, scrollLeft = 0;
+    function setupCarouselDrag() {
+        const track = document.getElementById('carousel-track');
+        track.addEventListener('mousedown', e => { isDragging = true; startX = e.pageX - track.offsetLeft; scrollLeft = track.scrollLeft; });
+        track.addEventListener('mouseleave', () => isDragging = false);
+        track.addEventListener('mouseup', () => isDragging = false);
+        track.addEventListener('mousemove', e => {
+            if (!isDragging) return;
+            e.preventDefault();
+            const x = e.pageX - track.offsetLeft;
+            track.scrollLeft = scrollLeft - (x - startX) * 1.5;
+        });
+    }
+
+    function scrollCarousel(dir) {
+        const track = document.getElementById('carousel-track');
+        track.scrollBy({ left: dir * 280, behavior: 'smooth' });
+    }
+
+    // ─── Related Grid ─────────────────────────────────────────────────────
+    function buildRelatedGrid() {
+        const grid = document.getElementById('related-grid');
+        const countEl = document.getElementById('related-count');
+        grid.innerHTML = '';
+        countEl.textContent = col.images.length;
+
+        col.images.forEach((img, i) => {
+            const div = document.createElement('div');
+            div.className = 'related-item';
+            if (i === currentIndex) div.style.outline = '2px solid rgba(255,255,204,0.4)';
+
+            div.innerHTML = `
+                <img src="${img.src}" alt="${img.title}" loading="lazy">
+                <div class="related-item-info">
+                    <span style="font-size:9px;font-weight:600;letter-spacing:0.12em;color:rgba(255,255,204,0.5);text-transform:uppercase;margin-bottom:4px;">${img.location}</span>
+                    <span style="font-size:12px;font-weight:600;color:rgba(255,255,204,0.9);letter-spacing:0.05em;">${img.title}</span>
+                </div>
+            `;
+            div.addEventListener('click', () => selectFromCarousel(i));
+            grid.appendChild(div);
+        });
+    }
+
+    // ─── UI Actions ──────────────────────────────────────────────────────
+    function toggleLike() {
+        isLiked = !isLiked;
+        const icon = document.getElementById('like-icon');
+        const label = document.getElementById('like-label');
+        const btn = document.getElementById('btn-like');
+
+        icon.textContent = isLiked ? 'favorite' : 'favorite_border';
+        icon.style.color = isLiked ? '#ffaaaa' : '';
+        label.textContent = isLiked ? 'Saved' : 'Save';
+        btn.classList.toggle('liked', isLiked);
+
+        icon.classList.add('like-pulse');
+        setTimeout(() => icon.classList.remove('like-pulse'), 300);
+        showToast(isLiked ? 'Added to favourites' : 'Removed from favourites');
+    }
+
+    function handleShare() {
+        const url = window.location.href;
+        if (navigator.share) {
+            navigator.share({ title: col.images[currentIndex].title, url });
+        } else {
+            navigator.clipboard.writeText(url).then(() => showToast('Link copied to clipboard'));
+        }
+    }
+
+    function handleDownload() {
+        showToast('Preparing download…');
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // ─── Navigation ──────────────────────────────────────────────────────
+    function navigateTo(href) {
+        const overlay = document.getElementById('page-transition');
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '1';
+        setTimeout(() => { window.location.href = href; }, 500);
+    }
+
+    function setupNav() {
+        // Intercept back-link for cinematic transition
+        document.getElementById('back-link').addEventListener('click', e => {
+            e.preventDefault();
+            navigateTo(`${collectionKey}.html`);
+        });
+    }
+
+    function setupMobileMenu() {
+        const menuBtn = document.getElementById('menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        if (menuBtn) menuBtn.addEventListener('click', () => menu.classList.remove('translate-x-full'));
+        if (closeBtn) closeBtn.addEventListener('click', () => menu.classList.add('translate-x-full'));
+    }
+
+    function setupScrollProgress() {
+        window.addEventListener('scroll', () => {
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = (window.scrollY / max) * 100;
+            document.getElementById('scroll-progress').style.width = pct + '%';
+
+            // Nav background on scroll
+            const navBg = document.getElementById('nav-bg');
+            navBg.style.opacity = window.scrollY > 60 ? '1' : '0';
+        });
+    }
+
+    function setupRevealObserver() {
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+    </script>
+
+<!-- Supabase CDN + data loader — must precede inline script that uses collections -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="./js/showcase-loader.js"></script>
+
+<script>
+/* ── Page Transitions ── */
+(function(){
+  var ov=document.createElement('div');
+  ov.className='page-fade-overlay';
+  document.body.appendChild(ov);
+  document.body.classList.add('page-loaded');
+  document.querySelectorAll('a[href]').forEach(function(link){
+    var href=link.getAttribute('href');
+    if(!href||href.charAt(0)==='#'||href.indexOf('mailto:')===0||href.indexOf('tel:')===0||href.indexOf('http')===0) return;
+    link.addEventListener('click',function(e){
+      e.preventDefault();
+      var target=link.href;
+      ov.classList.add('active');
+      setTimeout(function(){window.location.href=target;},400);
+    });
+  });
+  document.querySelectorAll('.copyright-year').forEach(function(el){
+    el.textContent=new Date().getFullYear();
+  });
+})();
+</script>
+<script>
+/* ── Unified Cursor ── */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches || window.innerWidth<768) return;
+  if(document.querySelector('.cur-dot')) return;
+  var d=document.createElement('div'), r=document.createElement('div');
+  d.className='cur-dot'; r.className='cur-ring';
+  document.body.appendChild(d); document.body.appendChild(r);
+  var mx=0,my=0,rx=0,ry=0,visible=false;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX; my=e.clientY;
+    d.style.left=mx+'px'; d.style.top=my+'px';
+    if(!visible){visible=true;rx=mx;ry=my;d.classList.add('on');r.classList.add('on');}
+  });
+  (function tick(){
+    rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13;
+    r.style.left=Math.round(rx*10)/10+'px';
+    r.style.top=Math.round(ry*10)/10+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseleave',function(){
+    d.classList.remove('on'); r.classList.remove('on'); visible=false;
+  });
+  document.addEventListener('mouseover',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){
+      d.classList.add('hov'); r.classList.add('hov');
+    }
+  });
+  document.addEventListener('mouseout',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){
+      d.classList.remove('hov'); r.classList.remove('hov');
+    }
+  });
+  document.addEventListener('mousedown',function(){r.classList.add('dn');});
+  document.addEventListener('mouseup',function(){r.classList.remove('dn');});
+})();
+</script>
+</body>
+</html>

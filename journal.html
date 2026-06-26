@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Journal — SAYANTH SUDHEESH</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@300;400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary-container": "#1d1d01",
+        "background": "#fdf9f3",
+        "on-background": "#1c1c18",
+        "outline-variant": "#cac7b9",
+        "surface-container": "#f1ede8",
+      },
+      fontFamily: {
+        "headline-lg": ["Libre Caslon Text"],
+        "label-sm": ["Hanken Grotesk"],
+        "body-md": ["Hanken Grotesk"],
+        "display-xl": ["Libre Caslon Text"],
+      },
+      fontSize: {
+        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "600" }],
+        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        "headline-lg": ["48px", { lineHeight: "56px", fontWeight: "400" }],
+        "display-xl": ["80px", { lineHeight: "92px", letterSpacing: "-0.02em", fontWeight: "400" }],
+      },
+      spacing: {
+        "margin-page": "64px",
+        "margin-page-mobile": "24px",
+        "gutter": "32px",
+      },
+    }
+  }
+}
+</script>
+<style>
+    /* ── Custom Cursor ── */
+  * { cursor: none !important; }
+  .cur-dot {
+    width: 7px; height: 7px; background: #fff; border-radius: 50%;
+    position: fixed; pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .18s ease, height .18s ease;
+  }
+  .cur-ring {
+    width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,.55);
+    border-radius: 50%; position: fixed;
+    pointer-events: none; z-index: 9998; mix-blend-mode: difference;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .35s cubic-bezier(.16,1,.3,1),
+                height .35s cubic-bezier(.16,1,.3,1), background .35s ease;
+  }
+  .cur-dot.on  { opacity: 1; }
+  .cur-ring.on { opacity: 1; }
+  .cur-dot.hov  { width: 5px; height: 5px; }
+  .cur-ring.hov { width: 56px; height: 56px; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+  .cur-ring.dn  { width: 24px; height: 24px; background: rgba(255,255,255,.13); }
+
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  body { background-color: #1c1d01; color: #fdf9f3; -webkit-font-smoothing: antialiased; }
+  .entry-card { border-top: 1px solid rgba(255,255,255,0.1); transition: background 0.3s ease; }
+  .entry-card:hover { background: rgba(255,255,255,0.03); }
+  .entry-card:hover .entry-arrow { transform: translateX(6px); }
+  .entry-arrow { transition: transform 0.3s cubic-bezier(0.16,1,0.3,1); }
+  .entry-img { transition: transform 0.7s cubic-bezier(0.19,1,0.22,1); }
+  .entry-card:hover .entry-img { transform: scale(1.04); }
+  .tag { display: inline-block; border: 1px solid rgba(255,255,255,0.2); padding: 2px 10px; font-size: 10px; letter-spacing: 0.15em; }
+
+  /* Custom Cursor */
+  /* Page Transitions */
+  .page-fade-overlay { position:fixed; inset:0; background:#0a0a00; z-index:99998; pointer-events:none; opacity:0; transition:opacity 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .page-fade-overlay.active { opacity:1; }
+  @keyframes globalPageIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes pageWrapIn { from { transform:translateY(8px); } to { transform:translateY(0); } }
+  body.page-loaded { animation: globalPageIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+  body.page-loaded > *:not(.cur-dot):not(.cur-ring):not(.page-fade-overlay) { animation: pageWrapIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+</style>
+</head>
+<body class="overflow-x-hidden min-h-screen flex flex-col">
+
+<!-- ── Shared Navbar ── -->
+<style>
+  /* ── Navbar tokens ── */
+  :root {
+    --nav-text: #fdf9f3;
+    --nav-text-muted: color-mix(in srgb, #fdf9f3 55%, transparent);
+    --nav-active-border: #fdf9f3;
+    --nav-mobile-bg: #1c1d01;
+    --nav-mobile-text: #fdf9f3;
+  }
+  /* ── Desktop nav ── */
+  .site-header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+    background: #1c1d01;
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 24px 64px;
+  }
+  @media (max-width: 768px) {
+    .site-header { padding: 20px 24px; }
+  }
+  .site-logo {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.3em; text-decoration: none;
+    color: #fdf9f3; white-space: nowrap; flex-shrink: 0;
+  }
+  .desktop-nav {
+    display: none; align-items: center; gap: 32px;
+  }
+  @media (min-width: 768px) { .desktop-nav { display: flex; } }
+  .nav-item {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+    text-decoration: none; padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    color: var(--nav-text-muted);
+    transition: color 0.25s ease, border-color 0.25s ease;
+    white-space: nowrap;
+  }
+  .nav-item:hover {
+    color: var(--nav-text);
+    border-bottom-color: var(--nav-text);
+  }
+  .nav-active {
+    color: var(--nav-text) !important;
+    border-bottom: 1px solid var(--nav-active-border) !important;
+  }
+  .nav-cta {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-decoration: none;
+    background: #fdf9f3; color: #1c1d01;
+    padding: 12px 24px; display: none;
+    transition: background 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: #ddd9d4; }
+  @media (min-width: 768px) { .nav-cta { display: inline-block; } }
+  .nav-end { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  
+  /* ═══════════════════════════════════════════
+     MOBILE NAV — Premium Fullscreen Overlay
+     (Mobile/Tablet only — ≤767px)
+  ═══════════════════════════════════════════ */
+
+  /* ── Hamburger button ── */
+  .hamburger-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: none; cursor: none !important;
+    color: #fdf9f3; padding: 4px;
+    width: 40px; height: 40px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (min-width: 768px) { .hamburger-btn { display: none; } }
+
+  /* ── Fullscreen overlay ── */
+  .mobile-nav-overlay {
+    position: fixed; inset: 0;
+    background: #111200;
+    z-index: 9999;
+    display: flex; flex-direction: column;
+    min-height: 100svh; /* viewport-height-safe for mobile browsers */
+    padding: 0;
+    /* Slide from right */
+    transform: translateX(100%);
+    opacity: 0;
+    transition:
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity   0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  @media (min-width: 768px) {
+    .mobile-nav-overlay { display: none !important; }
+  }
+  .mobile-nav-overlay.open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* ── Thin accent line left edge ── */
+  .mobile-nav-overlay::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 1px; height: 100%;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(253,249,243,0.15) 30%,
+      rgba(253,249,243,0.15) 70%,
+      transparent 100%
+    );
+  }
+
+  /* ── Header row (logo + close) ── */
+  .mobile-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(20px, 5vw, 28px) clamp(24px, 6vw, 40px);
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(253,249,243,0.06);
+  }
+
+  /* ── Logo inside menu ── */
+  .mobile-logo {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.32em;
+    color: #fdf9f3;
+    opacity: 0.9;
+    text-decoration: none;
+  }
+
+  /* ── Close button ── */
+  .mobile-close-btn {
+    background: none; border: none; cursor: none !important;
+    color: #fdf9f3;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(253,249,243,0.12);
+    transition: border-color 0.25s ease, background 0.25s ease;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-close-btn:hover {
+    border-color: rgba(253,249,243,0.35);
+    background: rgba(253,249,243,0.06);
+  }
+
+  /* ── Nav links wrapper ── */
+  .mobile-nav-links {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: clamp(32px, 8vw, 56px) clamp(28px, 7vw, 48px);
+    gap: 0;
+  }
+
+  /* ── Individual nav items ── */
+  .mobile-nav-item {
+    font-family: "Libre Caslon Text", serif;
+    font-size: clamp(2rem, 9vw, 3.25rem);
+    line-height: 1;
+    text-decoration: none;
+    color: #fdf9f3;
+    padding: clamp(14px, 3.5vw, 20px) 0;
+    border-bottom: 1px solid rgba(253,249,243,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition:
+      color 0.25s ease,
+      letter-spacing 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .mobile-nav-item:first-child {
+    border-top: 1px solid rgba(253,249,243,0.07);
+  }
+  .mobile-nav-item:hover,
+  .mobile-nav-item:focus {
+    font-style: italic;
+    color: rgba(253,249,243,0.85);
+  }
+  /* Arrow indicator on hover */
+  .mobile-nav-item::after {
+    content: '↗';
+    font-style: normal;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 14px;
+    color: rgba(253,249,243,0.25);
+    transition: color 0.25s ease, transform 0.3s ease;
+    flex-shrink: 0;
+    margin-left: 12px;
+  }
+  .mobile-nav-item:hover::after { color: rgba(253,249,243,0.55); transform: translate(2px, -2px); }
+
+  /* "Let's Create" special style */
+  .mobile-nav-item.mobile-cta {
+    color: rgba(220, 200, 120, 0.9);
+    border-bottom: none;
+    margin-top: 4px;
+  }
+  .mobile-nav-item.mobile-cta::after { color: rgba(220,200,120,0.35); }
+  .mobile-nav-item.mobile-cta:hover::after { color: rgba(220,200,120,0.7); }
+
+  /* ── Footer (email + tagline) ── */
+  .mobile-nav-footer {
+    flex-shrink: 0;
+    padding: clamp(20px, 4vw, 28px) clamp(28px, 7vw, 48px);
+    border-top: 1px solid rgba(253,249,243,0.06);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .mobile-nav-desc {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; line-height: 1.65;
+    color: rgba(253,249,243,0.35);
+    max-width: 300px;
+    margin: 0;
+  }
+
+  .mobile-nav-email {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; letter-spacing: 0.04em;
+    color: rgba(253,249,243,0.6);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(253,249,243,0.15);
+    padding-bottom: 3px;
+    align-self: flex-start;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .mobile-nav-email:hover {
+    color: #fdf9f3;
+    border-bottom-color: rgba(253,249,243,0.5);
+  }
+
+  /* ── Staggered entrance animation for links ── */
+  .mobile-nav-overlay.open .mobile-nav-item {
+    animation: navItemIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(1) { animation-delay: 0.12s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(2) { animation-delay: 0.18s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(3) { animation-delay: 0.24s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(4) { animation-delay: 0.30s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(5) { animation-delay: 0.36s; }
+  @keyframes navItemIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .mobile-nav-overlay.open .mobile-nav-footer {
+    animation: navItemIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.42s both;
+  }
+
+  /* ── Mobile page layout global fixes ── */
+  @media (max-width: 767px) {
+    /* Prevent horizontal overflow globally */
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+    /* Touch target: ensure hamburger is reachable */
+    .hamburger-btn {
+      min-width: 44px; min-height: 44px;
+    }
+    /* Tighter header on small screens */
+    .site-header {
+      padding: 18px 20px !important;
+    }
+  }
+  @media (max-width: 480px) {
+    .site-header { padding: 16px 18px !important; }
+    .mobile-logo { font-size: 10px; letter-spacing: 0.25em; }
+  }
+  @media (max-width: 390px) {
+    .mobile-nav-item { font-size: clamp(1.7rem, 9.5vw, 2.4rem); }
+    .mobile-nav-links { padding: 28px 22px; }
+    .mobile-nav-footer { padding: 18px 22px; }
+    .mobile-nav-header { padding: 18px 22px; }
+  }
+
+</style>
+
+<header class="site-header" id="site-header">
+  <a href="index.html" class="site-logo">SAYANTH SUDHEESH</a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <a class="nav-item font-label-sm text-label-sm" href="works.html" data-nav="works">Works</a>
+    <a class="nav-item font-label-sm text-label-sm" href="index.html#about" data-nav="about">About</a>
+    <a class="nav-item nav-active font-label-sm text-label-sm" href="journal.html" data-nav="journal">Journal</a>
+    <a class="nav-item font-label-sm text-label-sm" href="contact.html" data-nav="contact">Contact</a>
+  </nav>
+  <div class="nav-end">
+    <a href="lets-create.html" class="nav-cta">LET'S CREATE</a>
+    <button class="hamburger-btn" id="menu-btn" aria-label="Open menu">
+      <span class="material-symbols-outlined" style="font-size:32px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile overlay menu -->
+<div class="mobile-nav-overlay" id="mobile-menu" aria-hidden="true" role="dialog" aria-label="Navigation menu">
+  <div class="mobile-nav-header">
+    <a href="index.html" class="mobile-logo">SAYANTH SUDHEESH</a>
+    <button class="mobile-close-btn" id="close-menu-btn" aria-label="Close menu">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+  <nav class="mobile-nav-links" aria-label="Mobile navigation">
+        <a href="works.html" class="mobile-nav-item font-headline-lg">Works</a>
+        <a href="index.html#about" class="mobile-nav-item font-headline-lg">About</a>
+        <a href="journal.html" class="mobile-nav-item font-headline-lg">Journal</a>
+        <a href="contact.html" class="mobile-nav-item font-headline-lg">Contact</a>
+        <a href="lets-create.html" class="mobile-nav-item mobile-cta font-headline-lg">Let's Create</a>
+  
+  </nav>
+  <div class="mobile-nav-footer">
+    <p class="mobile-nav-desc">Capturing the silent luxury of moments through a minimalist editorial lens.</p>
+    <a class="mobile-nav-email" href="mailto:sayanthsudheesh.photography@gmail.com">sayanthsudheesh.photography@gmail.com</a>
+  </div>
+</div>
+
+<!-- Navbar JS -->
+<script>
+(function() {
+  var btn = document.getElementById('menu-btn');
+  var closeBtn = document.getElementById('close-menu-btn');
+  var overlay = document.getElementById('mobile-menu');
+  if (!btn || !overlay) return;
+
+  function openMenu() {
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  overlay.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+  // Prevent scroll bleed on touch
+  overlay.addEventListener('touchmove', function(e) {
+    if (overlay.scrollHeight <= overlay.clientHeight) e.preventDefault();
+  }, { passive: false });
+})();
+</script>
+<script>
+(function() {
+  var btn = document.getElementById('menu-btn');
+  var closeBtn = document.getElementById('close-menu-btn');
+  var overlay = document.getElementById('mobile-menu');
+  if (!btn || !overlay) return;
+  function openMenu() {
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  btn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  // Close on nav link click
+  overlay.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', closeMenu);
+  });
+  // Close on ESC
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+})();
+</script>
+
+<!-- Hero -->
+<section class="pt-36 pb-16 px-6 md:px-margin-page border-b border-white/10">
+  <p class="font-label-sm text-label-sm text-white/40 mb-6 tracking-widest">JOURNAL</p>
+  <h1 class="font-headline-lg text-4xl md:text-5xl leading-tight max-w-2xl mb-6">Behind the Shot</h1>
+  <p class="font-body-md text-body-md text-white/50 max-w-lg leading-relaxed">
+    Notes on process, light, location, and the decisions that shaped each frame.
+    For those who want to see beyond the photograph.
+  </p>
+</section>
+
+<!-- Journal Entries -->
+<main class="flex-grow px-6 md:px-margin-page py-16 flex flex-col gap-0">
+
+  <!-- Entry 1 -->
+  <article class="entry-card group py-12 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 md:gap-16 items-start cursor-pointer">
+    <div class="order-2 md:order-1">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="tag font-label-sm text-white/50">NATURE</span>
+        <span class="font-label-sm text-label-sm text-white/30">MAY 2025</span>
+      </div>
+      <h2 class="font-headline-lg text-2xl md:text-3xl mb-4 leading-snug group-hover:italic transition-all">
+        The Obsidian Range — Shooting in Fog at −4°C
+      </h2>
+      <p class="font-body-md text-body-md text-white/50 leading-relaxed mb-6 max-w-xl">
+        The shot was never planned. I had arrived at the ridgeline three hours before sunrise to scout angles, but the fog rolled in so fast that by the time I set up the Hasselblad, visibility had dropped to 40 metres. What happened next was entirely about patience — and trusting the meter.
+      </p>
+      <div class="flex flex-wrap gap-6 text-white/30 font-label-sm text-label-sm mb-6">
+        <span><span class="text-white/50 mr-2">CAMERA</span>Hasselblad X2D 100C</span>
+        <span><span class="text-white/50 mr-2">LENS</span>XCD 45mm f/3.5</span>
+        <span><span class="text-white/50 mr-2">EXPOSURE</span>1/60s · f/5.6 · ISO 800</span>
+      </div>
+      <span class="flex items-center gap-2 font-label-sm text-label-sm text-white/40 group-hover:text-white transition-colors">
+        READ ENTRY <span class="material-symbols-outlined text-[16px] entry-arrow">arrow_forward</span>
+      </span>
+    </div>
+    <div class="order-1 md:order-2 overflow-hidden aspect-[4/3] md:aspect-[3/4]">
+      <img data-entry-slug="obsidian-range" src="./images/nature_mountain.jpg" alt="The Obsidian Range fog landscape" class="entry-img w-full h-full object-cover grayscale brightness-75">
+    </div>
+  </article>
+
+  <!-- Entry 2 -->
+  <article class="entry-card group py-12 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 md:gap-16 items-start cursor-pointer">
+    <div class="order-2 md:order-1">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="tag font-label-sm text-white/50">MACRO</span>
+        <span class="font-label-sm text-label-sm text-white/30">MARCH 2025</span>
+      </div>
+      <h2 class="font-headline-lg text-2xl md:text-3xl mb-4 leading-snug group-hover:italic transition-all">
+        Dew on a Dandelion — The Physics of a Perfect Macro Shot
+      </h2>
+      <p class="font-body-md text-body-md text-white/50 leading-relaxed mb-6 max-w-xl">
+        Macro work is 90% setup and 10% trigger. For this frame, I used a macro rail on a tripod and shot 47 frames for focus stacking — the final image uses 12 of them. Wind is the enemy; I waited for 6am stillness in a Kerala garden and had exactly 20 minutes before the light shifted.
+      </p>
+      <div class="flex flex-wrap gap-6 text-white/30 font-label-sm text-label-sm mb-6">
+        <span><span class="text-white/50 mr-2">CAMERA</span>Sony A7R IV</span>
+        <span><span class="text-white/50 mr-2">LENS</span>90mm f/2.8 G Macro OSS</span>
+        <span><span class="text-white/50 mr-2">TECHNIQUE</span>Focus stacking · 12 frames</span>
+      </div>
+      <span class="flex items-center gap-2 font-label-sm text-label-sm text-white/40 group-hover:text-white transition-colors">
+        READ ENTRY <span class="material-symbols-outlined text-[16px] entry-arrow">arrow_forward</span>
+      </span>
+    </div>
+    <div class="order-1 md:order-2 overflow-hidden aspect-[4/3] md:aspect-[3/4]">
+      <img data-entry-slug="dandelion" src="./images/macro_dandelions.jpg" alt="Macro dew on dandelion" class="entry-img w-full h-full object-cover">
+    </div>
+  </article>
+
+  <!-- Entry 3 -->
+  <article class="entry-card group py-12 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 md:gap-16 items-start cursor-pointer">
+    <div class="order-2 md:order-1">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="tag font-label-sm text-white/50">CULTURAL</span>
+        <span class="font-label-sm text-label-sm text-white/30">JANUARY 2025</span>
+      </div>
+      <h2 class="font-headline-lg text-2xl md:text-3xl mb-4 leading-snug group-hover:italic transition-all">
+        Varanasi at Blue Hour — Shooting With Permission, Not Intrusion
+      </h2>
+      <p class="font-body-md text-body-md text-white/50 leading-relaxed mb-6 max-w-xl">
+        Cultural photography carries an ethical weight that landscape work doesn't. In Varanasi, I spent two days walking the ghats without a camera before I lifted it. This entry is about that decision — and why the restraint produced a better photograph than immediacy ever could.
+      </p>
+      <div class="flex flex-wrap gap-6 text-white/30 font-label-sm text-label-sm mb-6">
+        <span><span class="text-white/50 mr-2">CAMERA</span>Leica M11</span>
+        <span><span class="text-white/50 mr-2">LENS</span>35mm Summilux f/1.4</span>
+        <span><span class="text-white/50 mr-2">LIGHT</span>Blue hour · Ambient only</span>
+      </div>
+      <span class="flex items-center gap-2 font-label-sm text-label-sm text-white/40 group-hover:text-white transition-colors">
+        READ ENTRY <span class="material-symbols-outlined text-[16px] entry-arrow">arrow_forward</span>
+      </span>
+    </div>
+    <div class="order-1 md:order-2 overflow-hidden aspect-[4/3] md:aspect-[3/4]">
+      <img data-entry-slug="varanasi" src="./images/cultural_varanasi.jpg" alt="Varanasi blue hour ghats" class="entry-img w-full h-full object-cover">
+    </div>
+  </article>
+
+  <!-- Entry 4 -->
+  <article class="entry-card group py-12 grid grid-cols-1 md:grid-cols-[1fr_320px] gap-8 md:gap-16 items-start cursor-pointer">
+    <div class="order-2 md:order-1">
+      <div class="flex items-center gap-4 mb-6">
+        <span class="tag font-label-sm text-white/50">PRODUCT</span>
+        <span class="font-label-sm text-label-sm text-white/30">NOVEMBER 2024</span>
+      </div>
+      <h2 class="font-headline-lg text-2xl md:text-3xl mb-4 leading-snug group-hover:italic transition-all">
+        Shooting Watch Gears — Why I Never Use a Lightbox
+      </h2>
+      <p class="font-body-md text-body-md text-white/50 leading-relaxed mb-6 max-w-xl">
+        Most product photographers reach for a lightbox first. I reach for a single snoot on a boom arm. The difference is everything: controlled specular highlights on polished metal surfaces tell a story that flat, diffused light cannot. This is how that gear shot was built — in a black room, with one light, and a lot of repositioning.
+      </p>
+      <div class="flex flex-wrap gap-6 text-white/30 font-label-sm text-label-sm mb-6">
+        <span><span class="text-white/50 mr-2">CAMERA</span>Phase One XF IQ4</span>
+        <span><span class="text-white/50 mr-2">LIGHTING</span>Single snoot · Black V-flat</span>
+        <span><span class="text-white/50 mr-2">POST</span>Capture One · 3hr retouch</span>
+      </div>
+      <span class="flex items-center gap-2 font-label-sm text-label-sm text-white/40 group-hover:text-white transition-colors">
+        READ ENTRY <span class="material-symbols-outlined text-[16px] entry-arrow">arrow_forward</span>
+      </span>
+    </div>
+    <div class="order-1 md:order-2 overflow-hidden aspect-[4/3] md:aspect-[3/4]">
+      <img data-entry-slug="watch-gears" src="./images/product_watch_gears.jpg" alt="Watch gears macro product shot" class="entry-img w-full h-full object-cover">
+    </div>
+  </article>
+
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-white/10 flex flex-col md:flex-row justify-between items-center w-full px-6 md:px-margin-page py-6 gap-4 bg-[#1c1d01]">
+  <div class="font-label-sm text-[10px] font-bold text-background/30 tracking-widest uppercase">© <span class="copyright-year">2026</span> SAYANTH SUDHEESH</div>
+  <div class="flex flex-wrap justify-center items-center gap-6">
+    <a class="font-label-sm text-[10px] font-semibold text-background/40 hover:text-background hover:text-background transition-all uppercase tracking-widest" href="https://www.instagram.com/_say__nth_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">Instagram</a>
+    <a class="font-label-sm text-[10px] font-semibold text-background/40 hover:text-background hover:text-background transition-all uppercase tracking-widest" href="https://www.linkedin.com/in/sayanth-sudheesh" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="font-label-sm text-[10px] font-semibold text-background/40 hover:text-background hover:text-background transition-all uppercase tracking-widest" href="https://www.behance.net/sayanthsudheesh01" target="_blank" rel="noopener">Behance</a>
+    <a class="font-label-sm text-[10px] font-semibold text-background/40 hover:text-background hover:text-background transition-all uppercase tracking-widest" href="tel:+919074809948">+91 90748 09948</a>
+  </div>
+  <div class="font-label-sm text-[10px] font-semibold text-background/40 hover:text-background uppercase tracking-widest">All Rights Reserved</div>
+</footer>
+
+<!-- Supabase CDN — must precede all module scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="./js/journal-loader.js"></script>
+
+<script>
+/* ── Page Transitions ── */
+(function(){
+  var ov=document.createElement('div');
+  ov.className='page-fade-overlay';
+  document.body.appendChild(ov);
+  document.body.classList.add('page-loaded');
+  document.querySelectorAll('a[href]').forEach(function(link){
+    var href=link.getAttribute('href');
+    if(!href||href.charAt(0)==='#'||href.indexOf('mailto:')===0||href.indexOf('tel:')===0||href.indexOf('http')===0) return;
+    link.addEventListener('click',function(e){
+      e.preventDefault();
+      var target=link.href;
+      ov.classList.add('active');
+      setTimeout(function(){window.location.href=target;},400);
+    });
+  });
+  document.querySelectorAll('.copyright-year').forEach(function(el){
+    el.textContent=new Date().getFullYear();
+  });
+})();
+</script>
+<script>
+/* ── Unified Cursor ── */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches || window.innerWidth<768) return;
+  if(document.querySelector('.cur-dot')) return;
+  var d=document.createElement('div'), r=document.createElement('div');
+  d.className='cur-dot'; r.className='cur-ring';
+  document.body.appendChild(d); document.body.appendChild(r);
+  var mx=0,my=0,rx=0,ry=0,visible=false;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX; my=e.clientY;
+    d.style.left=mx+'px'; d.style.top=my+'px';
+    if(!visible){visible=true;rx=mx;ry=my;d.classList.add('on');r.classList.add('on');}
+  });
+  (function tick(){
+    rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13;
+    r.style.left=Math.round(rx*10)/10+'px';
+    r.style.top=Math.round(ry*10)/10+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseleave',function(){
+    d.classList.remove('on'); r.classList.remove('on'); visible=false;
+  });
+  document.addEventListener('mouseover',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){
+      d.classList.add('hov'); r.classList.add('hov');
+    }
+  });
+  document.addEventListener('mouseout',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){
+      d.classList.remove('hov'); r.classList.remove('hov');
+    }
+  });
+  document.addEventListener('mousedown',function(){r.classList.add('dn');});
+  document.addEventListener('mouseup',function(){r.classList.remove('dn');});
+})();
+</script>
+</body>
+</html>

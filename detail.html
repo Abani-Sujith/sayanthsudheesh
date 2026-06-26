@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SAYANTH SUDHEESH | Lightbox Viewer</title>
+    <meta name="description" content="Full-resolution image viewer — Sayanth Sudheesh Photography.">
+    <meta name="robots" content="noindex">
+    <meta property="og:title" content="SAYANTH SUDHEESH | Lightbox Viewer">
+    <meta property="og:description" content="Full-resolution image viewer — Sayanth Sudheesh Photography.">
+    <meta name="twitter:card" content="summary">
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600;800&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "outline-variant": "#cac7b9",
+              "on-surface-variant": "#48473d",
+              "tertiary": "#000000",
+              "error-container": "#ffdad6",
+              "surface-container-lowest": "#ffffff",
+              "outline": "#79776b",
+              "tertiary-fixed": "#f0dbfd",
+              "on-secondary": "#ffffff",
+              "primary-fixed": "#e7e5b5",
+              "inverse-on-surface": "#f4f0ea",
+              "tertiary-fixed-dim": "#d4bfe0",
+              "on-error-container": "#93000a",
+              "on-tertiary": "#ffffff",
+              "on-primary": "#ffffff",
+              "inverse-primary": "#cac99a",
+              "on-error": "#ffffff",
+              "inverse-surface": "#31302d",
+              "on-primary-fixed": "#1d1d01",
+              "error": "#ba1a1a",
+              "on-primary-container": "#87865d",
+              "tertiary-container": "#23162e",
+              "surface-tint": "#61603a",
+              "on-primary-fixed-variant": "#494825",
+              "surface-container": "#f1ede8",
+              "on-secondary-fixed-variant": "#484924",
+              "surface-container-high": "#ebe8e2",
+              "primary-container": "#1d1d01",
+              "on-background": "#1c1c18",
+              "primary": "#000000",
+              "surface-dim": "#ddd9d4",
+              "secondary-fixed": "#e5e5b4",
+              "secondary-fixed-dim": "#c9c99a",
+              "secondary-container": "#e2e3b1",
+              "surface-variant": "#e6e2dc",
+              "surface-container-highest": "#e6e2dc",
+              "surface": "#fdf9f3",
+              "on-tertiary-fixed-variant": "#50415c",
+              "on-secondary-container": "#64653e",
+              "on-surface": "#1c1c18",
+              "surface-container-low": "#f7f3ed",
+              "on-secondary-fixed": "#1c1d01",
+              "primary-fixed-dim": "#cac99a",
+              "secondary": "#5f613a",
+              "on-tertiary-container": "#8f7d9b",
+              "surface-bright": "#fdf9f3",
+              "background": "#fdf9f3",
+              "on-tertiary-fixed": "#23162e"
+            },
+            "borderRadius": {
+              "DEFAULT": "0px",
+              "lg": "0px",
+              "xl": "0px",
+              "full": "9999px"
+            },
+            "spacing": {
+              "margin-page-mobile": "24px",
+              "gutter": "32px",
+              "folder-padding": "40px",
+              "margin-page": "64px",
+              "split-gap": "0px"
+            },
+            "fontFamily": {
+              "headline-lg-mobile": ["Libre Caslon Text"],
+              "label-sm": ["Hanken Grotesk"],
+              "body-md": ["Hanken Grotesk"],
+              "display-xl": ["Libre Caslon Text"],
+              "headline-lg": ["Libre Caslon Text"]
+            },
+            "fontSize": {
+              "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+              "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+              "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+              "display-xl": ["80px", {"lineHeight": "92px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+              "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+    /* ── Custom Cursor ── */
+  * { cursor: none !important; }
+  .cur-dot {
+    width: 7px; height: 7px; background: #fff; border-radius: 50%;
+    position: fixed; pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .18s ease, height .18s ease;
+  }
+  .cur-ring {
+    width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,.55);
+    border-radius: 50%; position: fixed;
+    pointer-events: none; z-index: 9998; mix-blend-mode: difference;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .35s cubic-bezier(.16,1,.3,1),
+                height .35s cubic-bezier(.16,1,.3,1), background .35s ease;
+  }
+  .cur-dot.on  { opacity: 1; }
+  .cur-ring.on { opacity: 1; }
+  .cur-dot.hov  { width: 5px; height: 5px; }
+  .cur-ring.hov { width: 56px; height: 56px; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+  .cur-ring.dn  { width: 24px; height: 24px; background: rgba(255,255,255,.13); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .lightbox-bg {
+            background-color: #050505;
+        }
+        .ui-fade {
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hide-ui .ui-fade {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .nav-hitbox {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 25%;
+            z-index: 10;
+            cursor: pointer;
+        }
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid white;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease-out;
+            mix-blend-mode: difference;
+        }
+    
+  /* ── Page Transitions ── */
+  .page-fade-overlay {
+    position: fixed; inset: 0; background: #050505;
+    z-index: 99998; pointer-events: none; opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .page-fade-overlay.active { opacity: 1; }
+  @keyframes globalPageIn { from { opacity:0; } to { opacity:1; } }
+  @keyframes pageWrapIn { from { transform:translateY(8px); } to { transform:translateY(0); } }
+  body.page-loaded { animation: globalPageIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+  body.page-loaded > *:not(.cur-dot):not(.cur-ring):not(.page-fade-overlay) { animation: pageWrapIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+</style>
+</head>
+<body class="lightbox-bg text-surface overflow-hidden">
+
+<!-- Lightbox Canvas -->
+<main class="relative h-screen w-screen flex items-center justify-center overflow-hidden">
+    <!-- UI Navigation Hitboxes (Invisible) -->
+    <div class="nav-hitbox left-0 group" id="prev-hitbox">
+        <div class="ui-fade absolute left-margin-page top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 border border-outline-variant/30 text-white/50 group-hover:text-white group-hover:border-white transition-all">
+            <span class="material-symbols-outlined">chevron_left</span>
+        </div>
+    </div>
+    <div class="nav-hitbox right-0 group" id="next-hitbox">
+        <div class="ui-fade absolute right-margin-page top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 border border-outline-variant/30 text-white/50 group-hover:text-white group-hover:border-white transition-all">
+            <span class="material-symbols-outlined">chevron_right</span>
+        </div>
+    </div>
+
+    <!-- Top Control Bar -->
+    <header class="ui-fade absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-margin-page py-gutter">
+        <div class="flex flex-col">
+            <span class="font-label-sm text-label-sm text-white/40 tracking-[0.2em]">SAYANTH SUDHEESH</span>
+            <span class="font-label-sm text-label-sm text-white/80" id="portfolio-indicator">PORTFOLIO / --</span>
+        </div>
+        <!-- FIX 3: href set to a real path so the page-transition script attaches
+             its fade listener at parse time. initDetail() will override this href
+             to the correct collection page once data resolves. -->
+        <a class="group flex items-center gap-2 text-white/60 hover:text-white transition-colors duration-300" href="showcase.html" id="close-link">
+            <span class="font-label-sm text-label-sm">CLOSE</span>
+            <span class="material-symbols-outlined text-[18px]">close</span>
+        </a>
+    </header>
+
+    <!-- Main Image Stage -->
+    <!-- FIX 2: removed pointer-events-none from this wrapper so it cannot
+         interfere with underlying hitbox z-index stacking in edge cases. -->
+    <div class="relative w-full h-full flex items-center justify-center p-gutter md:p-margin-page">
+        <img alt="" class="max-w-[85vw] max-h-[70vh] md:max-h-[75vh] object-contain shadow-2xl transition-all duration-300 ease-out" id="main-photo" src="" style="transform: scale(0.98); opacity: 0;">
+    </div>
+
+    <!-- Bottom Metadata & Counter -->
+    <footer class="ui-fade absolute bottom-0 left-0 w-full z-50 px-6 md:px-margin-page py-gutter flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div class="flex flex-col gap-1">
+            <h1 class="font-headline-lg text-[24px] md:text-[32px] text-white leading-tight tracking-tight" id="lightbox-title">Loading...</h1>
+            <div class="flex items-center gap-4 text-white/40 font-label-sm text-label-sm">
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">location_on</span> <span id="lightbox-location">...</span></span>
+                <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">camera</span> <span id="lightbox-camera">...</span></span>
+            </div>
+        </div>
+        <div class="flex items-center gap-8">
+            <div class="flex flex-col items-end">
+                <span class="font-label-sm text-label-sm text-white/80 tracking-widest">COLLECTION</span>
+                <span class="font-label-sm text-label-sm text-white/40" id="lightbox-collection-name">...</span>
+            </div>
+            <div class="h-12 w-[1px] bg-white/10 hidden md:block"></div>
+            <div class="font-label-sm text-label-sm text-white/80 flex items-center gap-2">
+                <span class="text-white" id="current-index">00</span>
+                <span class="text-white/20">/</span>
+                <span class="text-white/40" id="total-count">00</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Progress Indicator -->
+    <div class="absolute bottom-0 left-0 w-full h-[2px] bg-white/5 z-[60]">
+        <div class="h-full bg-white/40 w-0 transition-all duration-500" id="progress-bar"></div>
+    </div>
+</main>
+
+<script>
+    // `collections` data is loaded asynchronously by showcase-loader.js
+    // via window.collectionsReady before DOMContentLoaded completes.
+    const urlParams = new URLSearchParams(window.location.search);
+    let collectionKey = urlParams.get('collection') || 'nature';
+    let currentIndex = parseInt(urlParams.get('index'), 10) || 0;
+    let currentCollection = []; // populated after data resolves
+
+    // Deferred init — waits for showcase-loader.js to populate window.collections
+    async function initDetail() {
+        await (window.collectionsReady || Promise.resolve());
+
+        const collections = window.collections || {};
+        if (!collections[collectionKey]) collectionKey = 'nature';
+
+        // detail.html uses the flat images array, not the full collection object
+        const col = collections[collectionKey];
+        currentCollection = (col && col.images) ? col.images : [];
+
+        function navigateWithFade(dest) {
+            const ov = document.querySelector('.page-fade-overlay');
+            if (ov) { ov.classList.add('active'); setTimeout(() => { window.location.href = dest; }, 400); }
+            else window.location.href = dest;
+        }
+
+        // ── FIX 1a: Guard against empty collection ────────────────────────────
+        // Without this guard, updatePage() is called below with an empty array,
+        // currentCollection[0] is undefined, and item.src throws a TypeError
+        // inside the setTimeout. That exception kills the entire initDetail()
+        // execution path before any event listeners are attached — which is
+        // why ALL controls (close, next, prev, keyboard) stop working.
+        if (currentCollection.length === 0) {
+            console.error(`[detail] Collection "${collectionKey}" resolved but contains no images.`);
+            document.getElementById('lightbox-title').textContent = 'No images found.';
+            const closeLink = document.getElementById('close-link');
+            if (closeLink) {
+                closeLink.href = 'showcase.html';
+                closeLink.onclick = (e) => {
+                    e.preventDefault();
+                    window.location.href = 'showcase.html';
+                };
+            }
+            return; // bail — do not proceed to listener attachment
+        }
+        // ─────────────────────────────────────────────────────────────────────
+
+        if (currentIndex < 0 || currentIndex >= currentCollection.length) {
+            currentIndex = 0;
+        }
+
+        // Set close link href
+        const closeLink = document.getElementById('close-link');
+        if (closeLink) {
+            closeLink.href = `${collectionKey}.html`;
+            closeLink.onclick = function (e) {
+                e.preventDefault();
+                navigateWithFade(`${collectionKey}.html`);
+            };
+        }
+
+        // DOM Elements
+        const mainPhoto = document.getElementById('main-photo');
+        const portfolioIndicator = document.getElementById('portfolio-indicator');
+        const titleEl = document.getElementById('lightbox-title');
+        const locationEl = document.getElementById('lightbox-location');
+        const cameraEl = document.getElementById('lightbox-camera');
+        const collectionNameEl = document.getElementById('lightbox-collection-name');
+        const currentIdxEl = document.getElementById('current-index');
+        const totalCountEl = document.getElementById('total-count');
+        const progressBar = document.getElementById('progress-bar');
+        const container = document.querySelector('main');
+
+        let uiVisible = true;
+        let timer;
+
+        // Hide UI on inactivity
+        function resetTimer() {
+            container.classList.remove('hide-ui');
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                container.classList.add('hide-ui');
+            }, 3000);
+        }
+
+        container.addEventListener('mousemove', resetTimer);
+        container.addEventListener('touchstart', resetTimer);
+        resetTimer();
+
+        // Render logic
+        function updatePage(direction = 0) {
+            const item = currentCollection[currentIndex];
+
+            // ── FIX 1b: Defensive null-check inside updatePage ────────────────
+            // Prevents any stale or out-of-bounds call from throwing a TypeError
+            // that would silently kill subsequent navigation calls.
+            if (!item) {
+                console.error(`[detail] updatePage: currentCollection[${currentIndex}] is undefined.`);
+                return;
+            }
+            // ─────────────────────────────────────────────────────────────────
+
+            // Premium transitional animation
+            mainPhoto.style.opacity = '0';
+            if (direction > 0) {
+                mainPhoto.style.transform = 'translateX(20px) scale(0.98)';
+            } else if (direction < 0) {
+                mainPhoto.style.transform = 'translateX(-20px) scale(0.98)';
+            } else {
+                mainPhoto.style.transform = 'scale(0.98)';
+            }
+
+            setTimeout(() => {
+                mainPhoto.src = item.src;
+                mainPhoto.alt = item.title;
+                titleEl.textContent = item.title;
+                locationEl.textContent = item.location;
+                cameraEl.textContent = item.camera;
+
+                // Collection display mapping
+                const displayNames = {
+                    nature: 'NATURE COLLECTION',
+                    macro: 'MACRO COLLECTION',
+                    product: 'PRODUCT COLLECTION',
+                    cultural: 'CULTURAL COLLECTION'
+                };
+                collectionNameEl.textContent = displayNames[collectionKey] || 'MINIMALISM';
+
+                const colIndices = {
+                    nature: '02',
+                    cultural: '03',
+                    macro: '04',
+                    product: '05'
+                };
+                portfolioIndicator.textContent = `PORTFOLIO / ${colIndices[collectionKey] || '01'}`;
+
+                currentIdxEl.textContent = String(currentIndex + 1).padStart(2, '0');
+                totalCountEl.textContent = String(currentCollection.length).padStart(2, '0');
+
+                // Progress Bar
+                const progressPercent = ((currentIndex + 1) / currentCollection.length) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+
+                // Update URL parameters without refresh
+                const newUrl = `${window.location.pathname}?collection=${collectionKey}&index=${currentIndex}`;
+                window.history.replaceState(null, '', newUrl);
+
+                setTimeout(() => {
+                    mainPhoto.style.opacity = '1';
+                    mainPhoto.style.transform = 'translateX(0) scale(1)';
+                }, 50);
+            }, 300);
+        }
+
+        // Trigger initial render now that data is ready
+        updatePage(0);
+
+        function navigate(step) {
+            currentIndex = (currentIndex + step + currentCollection.length) % currentCollection.length;
+            updatePage(step);
+        }
+
+        // Interactive Hitbox Handlers
+        document.getElementById('next-hitbox').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigate(1);
+        });
+
+        document.getElementById('prev-hitbox').addEventListener('click', (e) => {
+            e.stopPropagation();
+            navigate(-1);
+        });
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') navigate(1);
+            if (e.key === 'ArrowLeft')  navigate(-1);
+            if (e.key === 'Escape') navigateWithFade(`${collectionKey}.html`);
+        });
+
+        // Touch Swipe Gestures for Mobile
+        let touchstartX = 0;
+        let touchendX = 0;
+
+        function checkDirection() {
+            if (touchendX < touchstartX - 50) navigate(1);
+            if (touchendX > touchstartX + 50) navigate(-1);
+        }
+
+        document.addEventListener('touchstart', e => {
+            touchstartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            touchendX = e.changedTouches[0].screenX;
+            checkDirection();
+        }, { passive: true });
+
+    } // end initDetail
+</script>
+
+<!-- Supabase CDN + data loader -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="./js/showcase-loader.js"></script>
+<!-- Call initDetail only after collectionsReady resolves with real data.
+     Classic-script DOMContentLoaded fires BEFORE type=module scripts run (spec),
+     so window.collectionsReady is undefined at that point — this is the fix. -->
+<script type="module">
+    await window.collectionsReady;
+    initDetail();
+</script>
+
+<script>
+/* ── Page Transitions ── */
+(function(){
+  var ov=document.createElement('div');
+  ov.className='page-fade-overlay';
+  document.body.appendChild(ov);
+  document.body.classList.add('page-loaded');
+  document.querySelectorAll('a[href]').forEach(function(link){
+    var href=link.getAttribute('href');
+    if(!href||href.charAt(0)==='#'||href.indexOf('mailto:')===0||href.indexOf('tel:')===0||href.indexOf('http')===0) return;
+    if(link.id==='close-link') return; // managed by initDetail after data loads
+    link.addEventListener('click',function(e){
+      e.preventDefault();
+      var target=link.href;
+      ov.classList.add('active');
+      setTimeout(function(){window.location.href=target;},400);
+    });
+  });
+  document.querySelectorAll('.copyright-year').forEach(function(el){
+    el.textContent=new Date().getFullYear();
+  });
+})();
+</script>
+<script>
+/* ── Unified Cursor ── */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches || window.innerWidth<768) return;
+  if(document.querySelector('.cur-dot')) return;
+  var d=document.createElement('div'), r=document.createElement('div');
+  d.className='cur-dot'; r.className='cur-ring';
+  document.body.appendChild(d); document.body.appendChild(r);
+  var mx=0,my=0,rx=0,ry=0,visible=false;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX; my=e.clientY;
+    d.style.left=mx+'px'; d.style.top=my+'px';
+    if(!visible){visible=true;rx=mx;ry=my;d.classList.add('on');r.classList.add('on');}
+  });
+  (function tick(){
+    rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13;
+    r.style.left=Math.round(rx*10)/10+'px';
+    r.style.top=Math.round(ry*10)/10+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseleave',function(){
+    d.classList.remove('on'); r.classList.remove('on'); visible=false;
+  });
+  document.addEventListener('mouseover',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){
+      d.classList.add('hov'); r.classList.add('hov');
+    }
+  });
+  document.addEventListener('mouseout',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){
+      d.classList.remove('hov'); r.classList.remove('hov');
+    }
+  });
+  document.addEventListener('mousedown',function(){r.classList.add('dn');});
+  document.addEventListener('mouseup',function(){r.classList.remove('dn');});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Contact – SAYANTH SUDHEESH</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "outline-variant": "#cac7b9",
+        "on-surface-variant": "#48473d",
+        "tertiary": "#000000",
+        "error-container": "#ffdad6",
+        "surface-container-lowest": "#ffffff",
+        "outline": "#79776b",
+        "on-secondary": "#ffffff",
+        "on-primary": "#ffffff",
+        "inverse-on-surface": "#f4f0ea",
+        "on-error": "#ffffff",
+        "inverse-surface": "#31302d",
+        "error": "#ba1a1a",
+        "on-primary-container": "#87865d",
+        "surface-tint": "#61603a",
+        "surface-container": "#f1ede8",
+        "surface-container-high": "#ebe8e2",
+        "primary-container": "#1d1d01",
+        "on-background": "#1c1c18",
+        "primary": "#000000",
+        "surface-dim": "#ddd9d4",
+        "secondary-container": "#e2e3b1",
+        "surface-variant": "#e6e2dc",
+        "surface": "#fdf9f3",
+        "on-surface": "#1c1c18",
+        "surface-container-low": "#f7f3ed",
+        "secondary": "#5f613a",
+        "surface-bright": "#fdf9f3",
+        "background": "#fdf9f3",
+      },
+      borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+      spacing: { "margin-page-mobile": "24px", "gutter": "32px", "margin-page": "64px" },
+      fontFamily: {
+        "headline-lg": ["Libre Caslon Text"],
+        "label-sm": ["Hanken Grotesk"],
+        "body-md": ["Hanken Grotesk"],
+        "display-xl": ["Libre Caslon Text"],
+      },
+      fontSize: {
+        "headline-lg-mobile": ["32px", { lineHeight: "40px", fontWeight: "400" }],
+        "label-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "600" }],
+        "body-md": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+        "display-xl": ["80px", { lineHeight: "92px", letterSpacing: "-0.02em", fontWeight: "400" }],
+        "headline-lg": ["48px", { lineHeight: "56px", fontWeight: "400" }],
+      }
+    },
+  },
+}
+</script>
+<style>
+/* ── Custom Cursor removed ── */
+
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+/* ── Page Transitions ── */
+.page-fade-overlay {
+  position: fixed; inset: 0; background: #0a0a00;
+  z-index: 99998; pointer-events: none; opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+}
+.page-fade-overlay.active { opacity: 1; }
+@keyframes globalPageIn { from { opacity:0; } to { opacity:1; } }
+@keyframes pageWrapIn { from { transform:translateY(8px); } to { transform:translateY(0); } }
+body.page-loaded { animation: globalPageIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+body.page-loaded > *:not(.cur-dot):not(.cur-ring):not(.page-fade-overlay) { animation: pageWrapIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+/* ── Navbar tokens ── */
+:root {
+  --nav-text: #fdf9f3;
+  --nav-text-muted: color-mix(in srgb, #fdf9f3 55%, transparent);
+  --nav-active-border: #fdf9f3;
+  --nav-mobile-bg: #000000;
+  --nav-mobile-text: #fdf9f3;
+}
+/* ── Desktop nav ── */
+.site-header {
+  position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+  background: #000000;
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 64px;
+}
+@media (max-width: 768px) {
+  .site-header { padding: 20px 24px; }
+}
+.site-logo {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px; font-weight: 700;
+  letter-spacing: 0.3em; text-decoration: none;
+  color: #fdf9f3; white-space: nowrap; flex-shrink: 0;
+}
+.desktop-nav {
+  display: none; align-items: center; gap: 32px;
+}
+@media (min-width: 768px) { .desktop-nav { display: flex; } }
+.nav-item {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+  text-decoration: none; padding-bottom: 4px;
+  border-bottom: 1px solid transparent;
+  color: var(--nav-text-muted);
+  transition: color 0.25s ease, border-color 0.25s ease;
+  white-space: nowrap;
+}
+.nav-item:hover {
+  color: var(--nav-text);
+  border-bottom-color: var(--nav-text);
+}
+.nav-active {
+  color: var(--nav-text) !important;
+  border-bottom: 1px solid var(--nav-active-border) !important;
+}
+.nav-cta {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+  text-decoration: none;
+  background: #fdf9f3; color: #000000;
+  padding: 12px 24px; display: none;
+  transition: background 0.3s ease, color 0.3s ease;
+  white-space: nowrap;
+}
+.nav-cta:hover { background: #ddd9d4; }
+@media (min-width: 768px) { .nav-cta { display: inline-block; } }
+.nav-end { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+/* ═══════════════════════════════════════════
+     MOBILE NAV — Premium Fullscreen Overlay
+     (Mobile/Tablet only — ≤767px)
+  ═══════════════════════════════════════════ */
+
+  /* ── Hamburger button ── */
+  .hamburger-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: none;
+    color: #fdf9f3; padding: 4px;
+    width: 40px; height: 40px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (min-width: 768px) { .hamburger-btn { display: none; } }
+
+  /* ── Fullscreen overlay ── */
+  .mobile-nav-overlay {
+    position: fixed; inset: 0;
+    background: #111200;
+    z-index: 9999;
+    display: flex; flex-direction: column;
+    min-height: 100svh;
+    padding: 0;
+    transform: translateX(100%);
+    opacity: 0;
+    transition:
+      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity   0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  @media (min-width: 768px) {
+    .mobile-nav-overlay { display: none !important; }
+  }
+  .mobile-nav-overlay.open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+  .mobile-nav-overlay::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 1px; height: 100%;
+    background: linear-gradient(to bottom,
+      transparent 0%,
+      rgba(253,249,243,0.15) 30%,
+      rgba(253,249,243,0.15) 70%,
+      transparent 100%
+    );
+  }
+  .mobile-nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: clamp(20px, 5vw, 28px) clamp(24px, 6vw, 40px);
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(253,249,243,0.06);
+  }
+  .mobile-logo {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.32em;
+    color: #fdf9f3;
+    opacity: 0.9;
+    text-decoration: none;
+  }
+  .mobile-close-btn {
+    background: none; border: none;
+    color: #fdf9f3;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(253,249,243,0.12);
+    transition: border-color 0.25s ease, background 0.25s ease;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-close-btn:hover {
+    border-color: rgba(253,249,243,0.35);
+    background: rgba(253,249,243,0.06);
+  }
+  .mobile-nav-links {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: clamp(32px, 8vw, 56px) clamp(28px, 7vw, 48px);
+    gap: 0;
+  }
+  .mobile-nav-item {
+    font-family: "Libre Caslon Text", serif;
+    font-size: clamp(2rem, 9vw, 3.25rem);
+    line-height: 1;
+    text-decoration: none;
+    color: #fdf9f3;
+    padding: clamp(14px, 3.5vw, 20px) 0;
+    border-bottom: 1px solid rgba(253,249,243,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: color 0.25s ease, letter-spacing 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    position: relative;
+    overflow: hidden;
+  }
+  .mobile-nav-item:first-child {
+    border-top: 1px solid rgba(253,249,243,0.07);
+  }
+  .mobile-nav-item:hover, .mobile-nav-item:focus { font-style: italic; color: rgba(253,249,243,0.85); }
+  .mobile-nav-item::after {
+    content: '↗';
+    font-style: normal;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 14px;
+    color: rgba(253,249,243,0.25);
+    transition: color 0.25s ease, transform 0.3s ease;
+    flex-shrink: 0; margin-left: 12px;
+  }
+  .mobile-nav-item:hover::after { color: rgba(253,249,243,0.55); transform: translate(2px, -2px); }
+  .mobile-nav-item.mobile-cta {
+    color: rgba(220, 200, 120, 0.9);
+    border-bottom: none; margin-top: 4px;
+  }
+  .mobile-nav-item.mobile-cta::after { color: rgba(220,200,120,0.35); }
+  .mobile-nav-item.mobile-cta:hover::after { color: rgba(220,200,120,0.7); }
+  .mobile-nav-footer {
+    flex-shrink: 0;
+    padding: clamp(20px, 4vw, 28px) clamp(28px, 7vw, 48px);
+    border-top: 1px solid rgba(253,249,243,0.06);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .mobile-nav-desc {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; line-height: 1.65;
+    color: rgba(253,249,243,0.35);
+    max-width: 300px; margin: 0;
+  }
+  .mobile-nav-email {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; letter-spacing: 0.04em;
+    color: rgba(253,249,243,0.6); text-decoration: none;
+    border-bottom: 1px solid rgba(253,249,243,0.15);
+    padding-bottom: 3px; align-self: flex-start;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .mobile-nav-email:hover { color: #fdf9f3; border-bottom-color: rgba(253,249,243,0.5); }
+  .mobile-nav-overlay.open .mobile-nav-item {
+    animation: navItemIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(1) { animation-delay: 0.12s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(2) { animation-delay: 0.18s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(3) { animation-delay: 0.24s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(4) { animation-delay: 0.30s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(5) { animation-delay: 0.36s; }
+  @keyframes navItemIn {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .mobile-nav-overlay.open .mobile-nav-footer {
+    animation: navItemIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.42s both;
+  }
+  @media (max-width: 767px) {
+    html, body { max-width: 100vw; overflow-x: hidden; }
+    .hamburger-btn { min-width: 44px; min-height: 44px; }
+    .site-header { padding: 18px 20px !important; }
+  }
+  @media (max-width: 480px) {
+    .site-header { padding: 16px 18px !important; }
+    .mobile-logo { font-size: 10px; letter-spacing: 0.25em; }
+  }
+  @media (max-width: 390px) {
+    .mobile-nav-item { font-size: clamp(1.7rem, 9.5vw, 2.4rem); }
+    .mobile-nav-links { padding: 28px 22px; }
+    .mobile-nav-footer { padding: 18px 22px; }
+    .mobile-nav-header { padding: 18px 22px; }
+  }
+
+/* ── Contact Page Specifics ── */
+body { background: radial-gradient(ellipse at 40% 0%, #2a2500 0%, #1a1800 30%, #0a0a00 65%, #000000 100%); background-attachment: fixed; color: #fdf9f3; -webkit-font-smoothing: antialiased; }
+
+/* Fade-in animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { opacity: 0; animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.fade-up-1 { animation-delay: 0.1s; }
+.fade-up-2 { animation-delay: 0.25s; }
+.fade-up-3 { animation-delay: 0.4s; }
+.fade-up-4 { animation-delay: 0.55s; }
+.fade-up-5 { animation-delay: 0.7s; }
+.fade-up-6 { animation-delay: 0.85s; }
+
+/* Contact info cards */
+.info-card {
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 28px 32px;
+  transition: border-color 0.3s ease, background 0.3s ease;
+  position: relative;
+}
+.info-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(253,249,243,0.02) 0%, transparent 60%);
+  pointer-events: none;
+}
+.info-card:hover {
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.02);
+}
+.info-card-label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(253,249,243,0.35);
+  margin-bottom: 10px;
+  display: block;
+}
+.info-card-value {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 15px; font-weight: 400;
+  color: #fdf9f3; text-decoration: none;
+  transition: color 0.2s ease;
+  line-height: 1.5;
+}
+a.info-card-value:hover { color: rgba(253,249,243,0.65); }
+
+/* Social icons */
+.social-icon-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  text-decoration: none; color: rgba(253,249,243,0.45);
+  transition: color 0.3s ease;
+  padding: 20px 24px;
+  border: 1px solid rgba(255,255,255,0.07);
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+.social-icon-btn:hover {
+  color: #fdf9f3;
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.03);
+}
+.social-icon-btn .icon-svg {
+  width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.social-icon-btn:hover .icon-svg { transform: translateY(-3px); }
+.social-icon-btn .icon-label {
+  font-family: "Hanken Grotesk", sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase;
+}
+
+/* Divider */
+.elegant-divider {
+  width: 48px; height: 1px;
+  background: rgba(253,249,243,0.2);
+  margin: 0;
+}
+
+/* Status pill */
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #4ade80;
+  animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+</style>
+</head>
+<body class="bg-primary text-background selection:bg-background selection:text-primary overflow-x-hidden min-h-screen flex flex-col">
+
+<!-- ── Shared Navbar ── -->
+<header class="site-header" id="site-header">
+  <a href="index.html" class="site-logo">SAYANTH SUDHEESH</a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <a class="nav-item font-label-sm text-label-sm" href="works.html" data-nav="works">Works</a>
+    <a class="nav-item font-label-sm text-label-sm" href="index.html#about" data-nav="about">About</a>
+    <a class="nav-item font-label-sm text-label-sm" href="journal.html" data-nav="journal">Journal</a>
+    <a class="nav-item nav-active font-label-sm text-label-sm" href="contact.html" data-nav="contact">Contact</a>
+  </nav>
+  <div class="nav-end">
+    <a href="lets-create.html" class="nav-cta">LET'S CREATE</a>
+    <button class="hamburger-btn" id="menu-btn" aria-label="Open menu">
+      <span class="material-symbols-outlined" style="font-size:32px">menu</span>
+    </button>
+  </div>
+</header>
+
+<div class="mobile-nav-overlay" id="mobile-menu" aria-hidden="true">
+  <div class="mobile-nav-header">
+    <span class="mobile-logo">SAYANTH SUDHEESH</span>
+    <button class="mobile-close-btn" id="close-menu-btn" aria-label="Close menu">
+      <span class="material-symbols-outlined" style="font-size:32px">close</span>
+    </button>
+  </div>
+  <nav class="mobile-nav-links">
+    <a href="works.html" class="mobile-nav-item text-4xl font-headline-lg hover:italic transition-all" style="color:#fdf9f3">Works</a>
+    <a href="index.html#about" class="mobile-nav-item text-4xl font-headline-lg hover:italic transition-all" style="color:#fdf9f3">About</a>
+    <a href="journal.html" class="mobile-nav-item text-4xl font-headline-lg hover:italic transition-all" style="color:#fdf9f3">Journal</a>
+    <a href="contact.html" class="mobile-nav-item text-4xl font-headline-lg hover:italic transition-all" style="color:#fdf9f3">Contact</a>
+    <a href="lets-create.html" class="mobile-nav-item text-4xl font-headline-lg hover:italic transition-all" style="color:rgba(200,180,100,0.85)">Let's Create</a>
+  </nav>
+  <div class="mobile-nav-footer">
+    <p class="mobile-nav-desc">Capturing the silent luxury of moments through a minimalist editorial lens.</p>
+    <a class="mobile-nav-email" href="mailto:sayanthsudheesh.photography@gmail.com">sayanthsudheesh.photography@gmail.com</a>
+  </div>
+</div>
+
+<script>
+(function() {
+  var btn = document.getElementById('menu-btn');
+  var closeBtn = document.getElementById('close-menu-btn');
+  var overlay = document.getElementById('mobile-menu');
+  if (!btn || !overlay) return;
+  function openMenu() { overlay.classList.add('open'); overlay.setAttribute('aria-hidden', 'false'); document.body.style.overflow = 'hidden'; }
+  function closeMenu() { overlay.classList.remove('open'); overlay.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  overlay.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+})();
+</script>
+
+<!-- ── Main ── -->
+<main class="flex-grow" style="padding-top: 96px;">
+
+  <!-- 1. CONTACT HEADER -->
+  <section style="padding: 80px 64px 60px; max-width: 1200px; margin: 0 auto;">
+    <div class="fade-up fade-up-1" style="display: flex; align-items: center; gap: 16px; margin-bottom: 28px;">
+      <div class="elegant-divider"></div>
+      <span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(253,249,243,0.35);">Get In Touch</span>
+    </div>
+
+    <!-- Two-column: heading left, availability right -->
+    <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 48px; flex-wrap: wrap;">
+
+      <!-- Left: heading + subtext + contacts -->
+      <div class="fade-up fade-up-2" style="flex: 1; min-width: 260px;">
+        <h1 style="font-family: 'Libre Caslon Text', serif; font-size: clamp(48px, 8vw, 96px); font-weight: 400; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 20px; color: #fdf9f3;">
+          Contact
+        </h1>
+        <p style="font-family: 'Hanken Grotesk', sans-serif; font-size: 15px; font-weight: 300; color: rgba(253,249,243,0.5); letter-spacing: 0.03em; max-width: 400px; line-height: 1.7;">
+          Available for selected projects worldwide.<br>Reach out through any channel below.
+        </p>
+
+      </div>
+
+      <!-- Right: availability status -->
+      <div class="fade-up fade-up-3" style="flex: 0 0 auto; max-width: 380px; display: flex; flex-direction: column; gap: 18px; padding-top: 8px;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="status-dot"></div>
+          <span style="font-family: 'Hanken Grotesk', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(253,249,243,0.35);">Current Status</span>
+        </div>
+        <p style="font-family: 'Libre Caslon Text', serif; font-size: clamp(18px, 2.2vw, 26px); font-weight: 400; color: #fdf9f3; letter-spacing: -0.01em; line-height: 1.4; margin: 0;">
+          Available for selected collaborations worldwide.
+        </p>
+        <p style="font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; font-weight: 300; color: rgba(253,249,243,0.4); letter-spacing: 0.03em; line-height: 1.7; margin: 0;">
+          Open to editorial, commercial, and creative projects that demand exceptional visual storytelling.
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 3. SOCIAL MEDIA SHOWCASE -->
+  <section class="fade-up fade-up-3" style="padding: 24px 64px 48px; max-width: 1200px; margin: 0 auto;">
+    <span style="display: block; font-family: 'Hanken Grotesk', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: rgba(253,249,243,0.3); margin-bottom: 32px;">Social Presence</span>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+
+      <a href="https://www.instagram.com/_say__nth_" target="_blank" rel="noopener" class="social-icon-btn">
+        <div class="icon-svg">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+          </svg>
+        </div>
+        <span class="icon-label">Instagram</span>
+      </a>
+
+      <a href="https://www.behance.net/sayanthsudheesh01" target="_blank" rel="noopener" class="social-icon-btn">
+        <div class="icon-svg">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.5 11.25c.69 0 1.25-.56 1.25-1.25S8.19 8.75 7.5 8.75H5v2.5h2.5zm.5 1.5H5V15.5h3c.69 0 1.25-.56 1.25-1.25S8.69 12.75 8 12.75zM15.25 10.5c-.83 0-1.5.67-1.5 1.5h3c0-.83-.67-1.5-1.5-1.5z"/>
+            <path d="M20 2H4C2.9 2 2 2.9 2 4v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM13 8h4.5v1H13V8zm2.25 8c-2.07 0-3.75-1.68-3.75-3.75 0-2.07 1.68-3.75 3.75-3.75s3.75 1.68 3.75 3.75H11.5c0 1.1.89 2 2 2h3.5v1.5H15.25zM9.5 15.75c-1.24 0-2.25-1.01-2.25-2.25v-1H5v5.5H10V12.5h-.5v1c0 1.24-1.01 2.25-2.25 2.25H9.5z"/>
+          </svg>
+        </div>
+        <span class="icon-label">Behance</span>
+      </a>
+
+      <a href="https://www.linkedin.com/in/sayanth-sudheesh" target="_blank" rel="noopener" class="social-icon-btn">
+        <div class="icon-svg">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </div>
+        <span class="icon-label">LinkedIn</span>
+      </a>
+
+      <a href="mailto:sayanthsudheesh.photography@gmail.com" class="social-icon-btn">
+        <div class="icon-svg">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </div>
+        <span class="icon-label">Email</span>
+      </a>
+
+      <a href="tel:+919074809948" class="social-icon-btn">
+        <div class="icon-svg">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.54a16 16 0 0 0 6.29 6.29l.92-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </div>
+        <span class="icon-label">Phone</span>
+      </a>
+
+    </div>
+  </section>
+
+
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-primary border-t border-white/10 mt-auto flex flex-col md:flex-row justify-between items-center w-full px-6 md:px-margin-page py-6 gap-4" style="border-color: rgba(255,255,255,0.1);">
+  <div class="font-label-sm text-[10px] font-bold text-background/30 tracking-widest uppercase">© <span class="copyright-year">2026</span> SAYANTH SUDHEESH</div>
+  <div class="font-label-sm text-[10px] font-semibold text-background/40 uppercase tracking-widest">All Rights Reserved</div>
+</footer>
+
+<!-- ── Page Transition & Cursor Scripts ── -->
+<script>
+(function(){
+  var ov=document.createElement('div');
+  ov.className='page-fade-overlay';
+  document.body.appendChild(ov);
+  document.body.classList.add('page-loaded');
+  document.querySelectorAll('a[href]').forEach(function(link){
+    var href=link.getAttribute('href');
+    if(!href||href.charAt(0)==='#'||href.indexOf('mailto:')===0||href.indexOf('tel:')===0||href.indexOf('http')===0) return;
+    link.addEventListener('click',function(e){
+      e.preventDefault();
+      var target=link.href;
+      ov.classList.add('active');
+      setTimeout(function(){window.location.href=target;},400);
+    });
+  });
+  document.querySelectorAll('.copyright-year').forEach(function(el){
+    el.textContent=new Date().getFullYear();
+  });
+})();
+</script>
+
+
+<!-- Responsive adjustments -->
+<style>
+@media (max-width: 768px) {
+  section { padding-left: 24px !important; padding-right: 24px !important; }
+  .info-card { padding: 20px !important; }
+  div[style*="grid-template-columns: 1fr 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  .info-card[style*="border-right"] { border-right: none !important; border-bottom: 1px solid rgba(253,249,243,0.07) !important; }
+}
+</style>
+</body>
+</html>

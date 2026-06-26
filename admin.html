@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Sayanth Sudheesh Photography</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600&display=swap');
+
+    * { box-sizing: border-box; }
+
+    body {
+      font-family: 'Hanken Grotesk', sans-serif;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+    }
+
+    /* ── Auth screen ── */
+    #auth-screen {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    /* ── Main panel ── */
+    #admin-panel { display: none; }
+
+    /* ── Drop zone ── */
+    #drop-zone {
+      border: 2px dashed rgba(255,255,255,0.15);
+      border-radius: 8px;
+      transition: border-color 0.2s, background 0.2s;
+      cursor: pointer;
+    }
+    #drop-zone.drag-over {
+      border-color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* ── Preview thumbnail ── */
+    #preview-img {
+      display: none;
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-top: 1rem;
+    }
+
+    /* ── Photo grid ── */
+    .photo-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 6px;
+      background: #1a1a1a;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .photo-card:hover { transform: scale(1.02); }
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-card .card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.2s;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0.75rem;
+    }
+    .photo-card:hover .card-overlay { opacity: 1; }
+    .photo-card.selected {
+      outline: 2px solid rgba(255,255,255,0.7);
+      outline-offset: 2px;
+    }
+
+    /* ── Status bar ── */
+    #status-bar {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      letter-spacing: 0.05em;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 9999;
+      white-space: nowrap;
+    }
+    #status-bar.show { opacity: 1; }
+    #status-bar.success { background: #1a3a1a; color: #6fcf6f; border: 1px solid #2d5a2d; }
+    #status-bar.error   { background: #3a1a1a; color: #cf6f6f; border: 1px solid #5a2d2d; }
+    #status-bar.info    { background: #1a2a3a; color: #6faecf; border: 1px solid #2d3f5a; }
+
+    /* ── Input/Select shared ── */
+    .field {
+      width: 100%;
+      background: #161616;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      color: #e5e5e5;
+      padding: 0.6rem 0.85rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .field:focus { border-color: rgba(255,255,255,0.35); }
+    .field::placeholder { color: rgba(255,255,255,0.25); }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1.25rem;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+    .btn-primary { background: #e5e5e5; color: #0a0a0a; }
+    .btn-danger  { background: #3a1a1a; color: #cf6f6f; border: 1px solid #5a2d2d; }
+    .btn-ghost   { background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.12); }
+
+    /* ── Tabs ── */
+    .tab-btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.78rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: rgba(255,255,255,0.35);
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .tab-btn.active {
+      color: #e5e5e5;
+      border-bottom-color: #e5e5e5;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── Spinner ── */
+    .spin {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: #0a0a0a;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    .spin.show { display: block; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Progress bar ── */
+    #upload-progress {
+      display: none;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 0.75rem;
+    }
+    #upload-progress.show { display: block; }
+    #upload-progress-bar {
+      height: 100%;
+      background: #e5e5e5;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* ── Modal ── */
+    #confirm-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    #confirm-modal.show { display: flex; }
+    #confirm-modal-box {
+      background: #161616;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 1.75rem;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     AUTH SCREEN
+════════════════════════════════════════════════════════════ -->
+<div id="auth-screen">
+  <div style="width:100%;max-width:380px;">
+    <p class="text-xs tracking-widest uppercase text-white/30 mb-1">Sayanth Sudheesh</p>
+    <h1 class="text-2xl font-light text-white mb-8">Portfolio Admin</h1>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Email</label>
+        <input id="auth-email" type="email" class="field" placeholder="admin@example.com" autocomplete="email" />
+      </div>
+      <div>
+        <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Password</label>
+        <input id="auth-password" type="password" class="field" placeholder="••••••••" autocomplete="current-password" />
+      </div>
+
+      <div id="auth-error" class="text-xs text-red-400/80 hidden"></div>
+
+      <button id="auth-btn" class="btn btn-primary w-full mt-2">
+        <span id="auth-btn-label">Sign In</span>
+        <div class="spin" id="auth-spin"></div>
+      </button>
+    </div>
+
+    <p class="text-xs text-white/20 mt-8 leading-relaxed">
+      Admin access via Supabase Email Auth. Contact the developer if you need access.
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ADMIN PANEL
+════════════════════════════════════════════════════════════ -->
+<div id="admin-panel">
+
+  <!-- Header -->
+  <header class="border-b border-white/8 px-6 py-4 flex items-center justify-between sticky top-0 z-50" style="background:#0a0a0a;">
+    <div>
+      <p class="text-xs tracking-widest uppercase text-white/30">Sayanth Sudheesh</p>
+      <h1 class="text-lg font-light">Portfolio Admin</h1>
+    </div>
+    <div class="flex items-center gap-4">
+      <span id="admin-email-display" class="text-xs text-white/30"></span>
+      <button id="sign-out-btn" class="btn btn-ghost text-xs">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Tab bar -->
+  <div class="border-b border-white/8 px-6 flex gap-2">
+    <button class="tab-btn active" data-tab="upload">Upload</button>
+    <button class="tab-btn" data-tab="manage">Manage</button>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-6 py-8">
+
+    <!-- ── UPLOAD TAB ── -->
+    <div id="tab-upload" class="tab-panel active">
+      <h2 class="text-sm tracking-widest uppercase text-white/40 mb-6">Upload New Image</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        <!-- Left: file + preview -->
+        <div>
+          <div id="drop-zone" class="p-8 text-center" onclick="document.getElementById('file-input').click()">
+            <div class="text-white/20 text-4xl mb-3">+</div>
+            <p class="text-sm text-white/40">Drop image here or click to browse</p>
+            <p class="text-xs text-white/20 mt-1">JPG · PNG · WebP · max 10 MB</p>
+          </div>
+          <input id="file-input" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+          <img id="preview-img" alt="Preview" />
+          <div id="upload-progress"><div id="upload-progress-bar"></div></div>
+          <p id="selected-file-name" class="text-xs text-white/30 mt-2"></p>
+        </div>
+
+        <!-- Right: metadata fields -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Category *</label>
+            <select id="upload-category" class="field">
+              <option value="">— Select category —</option>
+              <option value="nature">Nature</option>
+              <option value="macro">Macro</option>
+              <option value="cultural">Cultural</option>
+              <option value="product">Product</option>
+              <option value="hero">Hero (Homepage)</option>
+              <option value="previews">Works Previews</option>
+              <option value="journal">Journal</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Title *</label>
+            <input id="upload-title" type="text" class="field" placeholder="e.g. The Guardian of Silence" />
+          </div>
+
+          <div>
+            <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Location</label>
+            <input id="upload-location" type="text" class="field" placeholder="e.g. Varanasi, India" />
+          </div>
+
+          <div>
+            <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Camera</label>
+            <input id="upload-camera" type="text" class="field" placeholder="e.g. Leica M11 / 35mm Summilux" />
+          </div>
+
+          <div>
+            <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Alt Text</label>
+            <input id="upload-alt" type="text" class="field" placeholder="Descriptive text for accessibility" />
+          </div>
+
+          <div>
+            <label class="block text-xs tracking-widest uppercase text-white/40 mb-2">Sort Order</label>
+            <input id="upload-sort" type="number" class="field" placeholder="0" min="0" value="0" />
+          </div>
+
+          <button id="upload-btn" class="btn btn-primary w-full mt-2">
+            <span id="upload-btn-label">Upload Image</span>
+            <div class="spin" id="upload-spin" style="border-top-color:#0a0a0a;"></div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── MANAGE TAB ── -->
+    <div id="tab-manage" class="tab-panel">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-sm tracking-widest uppercase text-white/40">Manage Images</h2>
+        <div class="flex items-center gap-3">
+          <select id="filter-category" class="field" style="width:auto;padding:0.45rem 0.75rem;">
+            <option value="">All Categories</option>
+            <option value="nature">Nature</option>
+            <option value="macro">Macro</option>
+            <option value="cultural">Cultural</option>
+            <option value="product">Product</option>
+          </select>
+          <button id="refresh-btn" class="btn btn-ghost">Refresh</button>
+        </div>
+      </div>
+
+      <!-- Selected photo actions -->
+      <div id="selected-actions" class="hidden mb-6 p-4 rounded-lg border border-white/10 bg-white/3">
+        <div class="flex items-center justify-between flex-wrap gap-3">
+          <div>
+            <p id="selected-info-title" class="text-sm font-medium"></p>
+            <p id="selected-info-cat" class="text-xs text-white/40 mt-0.5"></p>
+          </div>
+          <div class="flex gap-2">
+            <label class="btn btn-ghost cursor-pointer" style="font-size:0.78rem;">
+              Replace Image
+              <input id="replace-file-input" type="file" accept="image/jpeg,image/png,image/webp" class="hidden" />
+            </label>
+            <button id="toggle-active-btn" class="btn btn-ghost">Toggle Active</button>
+            <button id="delete-btn" class="btn btn-danger">Delete</button>
+          </div>
+        </div>
+        <!-- Inline edit fields -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+          <input id="edit-title" type="text" class="field" placeholder="Title" />
+          <input id="edit-location" type="text" class="field" placeholder="Location" />
+          <input id="edit-camera" type="text" class="field" placeholder="Camera" />
+          <input id="edit-sort" type="number" class="field" placeholder="Sort order" min="0" />
+        </div>
+        <button id="save-edits-btn" class="btn btn-primary mt-3">Save Changes</button>
+      </div>
+
+      <!-- Photo grid -->
+      <div id="photo-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+        <div class="col-span-full text-center py-16 text-white/20 text-sm" id="grid-placeholder">
+          Loading photos…
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ── CONFIRM MODAL ── -->
+<div id="confirm-modal">
+  <div id="confirm-modal-box">
+    <h3 id="confirm-title" class="text-base font-medium mb-2"></h3>
+    <p id="confirm-body" class="text-sm text-white/50 mb-6"></p>
+    <div class="flex gap-3 justify-end">
+      <button id="confirm-cancel-btn" class="btn btn-ghost">Cancel</button>
+      <button id="confirm-ok-btn" class="btn btn-danger">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── STATUS BAR ── -->
+<div id="status-bar"></div>
+
+<!-- ── Scripts ── -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="../js/admin.js"></script>
+</body>
+</html>

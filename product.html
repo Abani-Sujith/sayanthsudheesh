@@ -1,0 +1,523 @@
+<!DOCTYPE html><html class="dark" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Product Collection | SAYANTH SUDHEESH</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Hanken+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#cac7b9",
+                        "on-surface-variant": "#48473d",
+                        "tertiary": "#000000",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#79776b",
+                        "tertiary-fixed": "#f0dbfd",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed": "#e7e5b5",
+                        "inverse-on-surface": "#f4f0ea",
+                        "tertiary-fixed-dim": "#d4bfe0",
+                        "on-error-container": "#93000a",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#cac99a",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#31302d",
+                        "on-primary-fixed": "#1d1d01",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#87865d",
+                        "tertiary-container": "#23162e",
+                        "surface-tint": "#61603a",
+                        "on-primary-fixed-variant": "#494825",
+                        "surface-container": "#f1ede8",
+                        "on-secondary-fixed-variant": "#484924",
+                        "surface-container-high": "#ebe8e2",
+                        "primary-container": "#1d1d01",
+                        "on-background": "#1c1c18",
+                        "primary": "#000000",
+                        "surface-dim": "#ddd9d4",
+                        "secondary-fixed": "#e5e5b4",
+                        "secondary-fixed-dim": "#c9c99a",
+                        "secondary-container": "#e2e3b1",
+                        "surface-variant": "#e6e2dc",
+                        "surface-container-highest": "#e6e2dc",
+                        "surface": "#fdf9f3",
+                        "on-tertiary-fixed-variant": "#50415c",
+                        "on-secondary-container": "#64653e",
+                        "on-surface": "#1c1c18",
+                        "surface-container-low": "#f7f3ed",
+                        "on-secondary-fixed": "#1c1d01",
+                        "primary-fixed-dim": "#cac99a",
+                        "secondary": "#5f613a",
+                        "on-tertiary-container": "#8f7d9b",
+                        "surface-bright": "#fdf9f3",
+                        "background": "#fdf9f3",
+                        "on-tertiary-fixed": "#23162e"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-page-mobile": "24px",
+                        "gutter": "32px",
+                        "folder-padding": "40px",
+                        "margin-page": "64px",
+                        "split-gap": "0px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Libre Caslon Text"],
+                        "label-sm": ["Hanken Grotesk"],
+                        "body-md": ["Hanken Grotesk"],
+                        "display-xl": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "400"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "display-xl": ["80px", {"lineHeight": "92px", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                        "headline-lg": ["48px", {"lineHeight": "56px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+  /* ── Custom Cursor ── */
+  * { cursor: none !important; }
+  .cur-dot {
+    width: 7px; height: 7px; background: #fff; border-radius: 50%;
+    position: fixed; pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .18s ease, height .18s ease;
+  }
+  .cur-ring {
+    width: 34px; height: 34px; border: 1.5px solid rgba(255,255,255,.55);
+    border-radius: 50%; position: fixed;
+    pointer-events: none; z-index: 9998; mix-blend-mode: difference;
+    transform: translate(-50%, -50%); opacity: 0;
+    transition: opacity .25s ease, width .35s cubic-bezier(.16,1,.3,1),
+                height .35s cubic-bezier(.16,1,.3,1), background .35s ease;
+  }
+  .cur-dot.on  { opacity: 1; }
+  .cur-ring.on { opacity: 1; }
+  .cur-dot.hov  { width: 5px; height: 5px; }
+  .cur-ring.hov { width: 56px; height: 56px; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.2); }
+  .cur-ring.dn  { width: 24px; height: 24px; background: rgba(255,255,255,.13); }
+
+    .page-fade-overlay {
+        position: fixed; inset: 0; background: #0a0a00;
+        z-index: 99998; pointer-events: none; opacity: 0;
+        transition: opacity 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .page-fade-overlay.active { opacity: 1; }
+    @keyframes globalPageIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes pageWrapIn { from { transform:translateY(8px); } to { transform:translateY(0); } }
+    body.page-loaded { animation: globalPageIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+    body.page-loaded > *:not(.cur-dot):not(.cur-ring):not(.page-fade-overlay) { animation: pageWrapIn 0.4s cubic-bezier(0.4,0,0.2,1) forwards; }
+
+        body {
+            background-color: #000000;
+            color: #fdf9f3;
+            -webkit-font-smoothing: antialiased;
+        }
+        .masonry-grid {
+            column-count: 1;
+            column-gap: 0;
+        }
+        @media (min-width: 768px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1280px) { .masonry-grid { column-count: 3; } }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 0;
+        }
+        .image-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
+        }
+        .masonry-item:hover .image-overlay {
+            opacity: 1;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+</style>
+</head>
+<body data-category="product" class="font-body-md text-body-md selection:bg-[#fdf9f3] selection:text-[#000000] overflow-x-hidden">
+
+<!-- Top Navigation --><!-- ── Shared Navbar ── -->
+<style>
+  :root {
+    --nav-text: #fdf9f3;
+    --nav-text-muted: color-mix(in srgb, #fdf9f3 55%, transparent);
+    --nav-active-border: #fdf9f3;
+    --nav-mobile-bg: #000000;
+    --nav-mobile-text: #fdf9f3;
+    --navbar-height: 72px;
+  }
+  @media (max-width: 768px) { :root { --navbar-height: 64px; } }
+  @media (max-width: 480px) { :root { --navbar-height: 56px; } }
+  .site-header {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 50;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 24px 64px;
+  }
+  @media (max-width: 768px) { .site-header { padding: 20px 24px; } }
+  .site-logo {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.3em; text-decoration: none;
+    color: #fdf9f3; white-space: nowrap; flex-shrink: 0;
+  }
+  .desktop-nav { display: none; align-items: center; gap: 32px; }
+  @media (min-width: 768px) { .desktop-nav { display: flex; } }
+  .nav-item {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+    text-decoration: none; padding-bottom: 4px;
+    border-bottom: 1px solid transparent;
+    color: var(--nav-text-muted);
+    transition: color 0.25s ease, border-color 0.25s ease;
+    white-space: nowrap;
+  }
+  .nav-item:hover { color: var(--nav-text); border-bottom-color: var(--nav-text); }
+  .nav-active { color: var(--nav-text) !important; border-bottom: 1px solid var(--nav-active-border) !important; }
+  .nav-cta {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+    text-decoration: none;
+    background: #fdf9f3; color: #1c1d01;
+    padding: 12px 24px; display: none;
+    transition: background 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
+  }
+  .nav-cta:hover { background: #ddd9d4; }
+  @media (min-width: 768px) { .nav-cta { display: inline-block; } }
+  .nav-end { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  .hamburger-btn {
+    display: flex; align-items: center; justify-content: center;
+    background: none; border: none; cursor: none !important;
+    color: #fdf9f3; padding: 4px;
+    width: 40px; height: 40px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  @media (min-width: 768px) { .hamburger-btn { display: none; } }
+  .mobile-nav-overlay {
+    position: fixed; inset: 0;
+    background: #111200;
+    z-index: 9999;
+    display: flex; flex-direction: column;
+    min-height: 100svh;
+    padding: 0;
+    transform: translateX(100%);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  @media (min-width: 768px) { .mobile-nav-overlay { display: none !important; } }
+  .mobile-nav-overlay.open { transform: translateX(0); opacity: 1; pointer-events: all; }
+  .mobile-nav-overlay::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 1px; height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(253,249,243,0.15) 30%, rgba(253,249,243,0.15) 70%, transparent 100%);
+  }
+  .mobile-nav-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: clamp(20px, 5vw, 28px) clamp(24px, 6vw, 40px);
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(253,249,243,0.06);
+  }
+  .mobile-logo {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.32em;
+    color: #fdf9f3; opacity: 0.9; text-decoration: none;
+  }
+  .mobile-close-btn {
+    background: none; border: none; cursor: none !important;
+    color: #fdf9f3;
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    border: 1px solid rgba(253,249,243,0.12);
+    transition: border-color 0.25s ease, background 0.25s ease;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .mobile-close-btn:hover { border-color: rgba(253,249,243,0.35); background: rgba(253,249,243,0.06); }
+  .mobile-nav-links {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding: clamp(32px, 8vw, 56px) clamp(28px, 7vw, 48px);
+    gap: 0;
+  }
+  .mobile-nav-item {
+    font-family: "Libre Caslon Text", serif;
+    font-size: clamp(2rem, 9vw, 3.25rem);
+    line-height: 1;
+    text-decoration: none;
+    color: #fdf9f3;
+    padding: clamp(14px, 3.5vw, 20px) 0;
+    border-bottom: 1px solid rgba(253,249,243,0.07);
+    display: flex; align-items: center; justify-content: space-between;
+    transition: color 0.25s ease, letter-spacing 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    position: relative; overflow: hidden;
+  }
+  .mobile-nav-item:first-child { border-top: 1px solid rgba(253,249,243,0.07); }
+  .mobile-nav-item:hover, .mobile-nav-item:focus { font-style: italic; color: rgba(253,249,243,0.85); }
+  .mobile-nav-item::after {
+    content: '↗'; font-style: normal;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 14px; color: rgba(253,249,243,0.25);
+    transition: color 0.25s ease, transform 0.3s ease;
+    flex-shrink: 0; margin-left: 12px;
+  }
+  .mobile-nav-item:hover::after { color: rgba(253,249,243,0.55); transform: translate(2px, -2px); }
+  .mobile-nav-item.mobile-cta { color: rgba(220, 200, 120, 0.9); border-bottom: none; margin-top: 4px; }
+  .mobile-nav-item.mobile-cta::after { color: rgba(220,200,120,0.35); }
+  .mobile-nav-item.mobile-cta:hover::after { color: rgba(220,200,120,0.7); }
+  .mobile-nav-footer {
+    flex-shrink: 0;
+    padding: clamp(20px, 4vw, 28px) clamp(28px, 7vw, 48px);
+    border-top: 1px solid rgba(253,249,243,0.06);
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .mobile-nav-desc {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; line-height: 1.65;
+    color: rgba(253,249,243,0.35); max-width: 300px; margin: 0;
+  }
+  .mobile-nav-email {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 11px; letter-spacing: 0.04em;
+    color: rgba(253,249,243,0.6); text-decoration: none;
+    border-bottom: 1px solid rgba(253,249,243,0.15);
+    padding-bottom: 3px; align-self: flex-start;
+    transition: color 0.25s ease, border-color 0.25s ease;
+  }
+  .mobile-nav-email:hover { color: #fdf9f3; border-bottom-color: rgba(253,249,243,0.5); }
+  .mobile-nav-overlay.open .mobile-nav-item { animation: navItemIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(1) { animation-delay: 0.12s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(2) { animation-delay: 0.18s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(3) { animation-delay: 0.24s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(4) { animation-delay: 0.30s; }
+  .mobile-nav-overlay.open .mobile-nav-item:nth-child(5) { animation-delay: 0.36s; }
+  @keyframes navItemIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  .mobile-nav-overlay.open .mobile-nav-footer { animation: navItemIn 0.5s cubic-bezier(0.16,1,0.3,1) 0.42s both; }
+  @media (max-width: 767px) {
+    html, body { max-width: 100vw; overflow-x: hidden; }
+    .hamburger-btn { min-width: 44px; min-height: 44px; }
+    .site-header { padding: 18px 20px !important; }
+  }
+  @media (max-width: 480px) {
+    .site-header { padding: 16px 18px !important; }
+    .mobile-logo { font-size: 10px; letter-spacing: 0.25em; }
+  }
+  @media (max-width: 390px) {
+    .mobile-nav-item { font-size: clamp(1.7rem, 9.5vw, 2.4rem); }
+    .mobile-nav-links { padding: 28px 22px; }
+    .mobile-nav-footer { padding: 18px 22px; }
+    .mobile-nav-header { padding: 18px 22px; }
+  }
+</style>
+
+<header class="site-header" id="site-header">
+  <a href="index.html" class="site-logo">SAYANTH SUDHEESH</a>
+  <nav class="desktop-nav" aria-label="Main navigation">
+    <a class="nav-item nav-active font-label-sm text-label-sm" href="works.html" data-nav="works">Works</a>
+    <a class="nav-item font-label-sm text-label-sm" href="index.html#about" data-nav="about">About</a>
+    <a class="nav-item font-label-sm text-label-sm" href="journal.html" data-nav="journal">Journal</a>
+    <a class="nav-item font-label-sm text-label-sm" href="contact.html" data-nav="contact">Contact</a>
+  </nav>
+  <div class="nav-end">
+    <a href="lets-create.html" class="nav-cta">LET'S CREATE</a>
+    <button class="hamburger-btn" id="menu-btn" aria-label="Open menu">
+      <span class="material-symbols-outlined" style="font-size:32px">menu</span>
+    </button>
+  </div>
+</header>
+
+<!-- Mobile overlay menu -->
+<div class="mobile-nav-overlay" id="mobile-menu" aria-hidden="true" role="dialog" aria-label="Navigation menu">
+  <div class="mobile-nav-header">
+    <a href="index.html" class="mobile-logo">SAYANTH SUDHEESH</a>
+    <button class="mobile-close-btn" id="close-menu-btn" aria-label="Close menu">
+      <span class="material-symbols-outlined" style="font-size:20px">close</span>
+    </button>
+  </div>
+  <nav class="mobile-nav-links" aria-label="Mobile navigation">
+        <a href="works.html" class="mobile-nav-item font-headline-lg">Works</a>
+        <a href="index.html#about" class="mobile-nav-item font-headline-lg">About</a>
+        <a href="journal.html" class="mobile-nav-item font-headline-lg">Journal</a>
+        <a href="contact.html" class="mobile-nav-item font-headline-lg">Contact</a>
+        <a href="lets-create.html" class="mobile-nav-item mobile-cta font-headline-lg">Let's Create</a>
+  </nav>
+  <div class="mobile-nav-footer">
+    <p class="mobile-nav-desc">Capturing the silent luxury of moments through a minimalist editorial lens.</p>
+    <a class="mobile-nav-email" href="mailto:sayanthsudheesh.photography@gmail.com">sayanthsudheesh.photography@gmail.com</a>
+  </div>
+</div>
+
+<!-- Navbar JS -->
+<script>
+(function() {
+  var btn = document.getElementById('menu-btn');
+  var closeBtn = document.getElementById('close-menu-btn');
+  var overlay = document.getElementById('mobile-menu');
+  if (!btn || !overlay) return;
+  function openMenu() {
+    overlay.classList.add('open');
+    overlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    document.documentElement.style.overflow = 'hidden';
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function closeMenu() {
+    overlay.classList.remove('open');
+    overlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    document.documentElement.style.overflow = '';
+    btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', openMenu);
+  if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+  overlay.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', closeMenu); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeMenu(); });
+  overlay.addEventListener('touchmove', function(e) {
+    if (overlay.scrollHeight <= overlay.clientHeight) e.preventDefault();
+  }, { passive: false });
+})();
+</script>
+
+<!-- Header Section -->
+<header class="pt-32 pb-12 px-6 md:px-margin-page bg-black">
+<div class="max-w-4xl">
+<a class="inline-flex items-center gap-2 text-label-sm font-label-sm uppercase tracking-widest mb-6 opacity-60 hover:opacity-100 transition-opacity text-white" href="works.html">
+    <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+    Back to Collections
+</a>
+<h1 class="font-headline-lg text-headline-lg md:text-display-xl md:font-display-xl mb-4">Product Collection</h1>
+<p class="font-body-md text-body-md text-[#79776b] max-w-2xl">
+    A curated exploration of form, texture, and materiality. This series focuses on the architectural silence of high-end objects, captured through a lens of extreme precision and editorial minimalism.
+</p>
+</div>
+</header>
+
+<!-- Full-Screen Masonry Gallery -->
+<main class="w-full bg-black" style="padding-top: var(--navbar-height);">
+<div class="masonry-grid" id="masonry-grid">
+<div id="gallery-loading" class="col-span-full flex items-center justify-center py-32">
+  <div class="flex flex-col items-center gap-4">
+    <div class="w-8 h-8 border-2 border-white/20 border-t-white/60 rounded-full animate-spin"></div>
+    <span class="text-white/30 text-xs tracking-widest uppercase">Loading</span>
+  </div>
+</div>
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="border-t border-white/10 flex flex-col md:flex-row justify-between items-center w-full px-6 md:px-margin-page py-6 gap-4 bg-black">
+  <div class="font-label-sm text-[10px] font-bold text-white/30 tracking-widest uppercase">© <span class="copyright-year">2026</span> SAYANTH SUDHEESH</div>
+  <div class="flex flex-wrap justify-center items-center gap-6">
+    <a class="font-label-sm text-[10px] font-semibold text-white/50 hover:text-white transition-all uppercase tracking-widest" href="https://www.instagram.com/_say__nth_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener">Instagram</a>
+    <a class="font-label-sm text-[10px] font-semibold text-white/50 hover:text-white transition-all uppercase tracking-widest" href="https://www.linkedin.com/in/sayanth-sudheesh" target="_blank" rel="noopener">LinkedIn</a>
+    <a class="font-label-sm text-[10px] font-semibold text-white/50 hover:text-white transition-all uppercase tracking-widest" href="https://www.behance.net/sayanthsudheesh01" target="_blank" rel="noopener">Behance</a>
+    <a class="font-label-sm text-[10px] font-semibold text-white/50 hover:text-white transition-all uppercase tracking-widest" href="tel:+919074809948">+91 90748 09948</a>
+  </div>
+  <div class="font-label-sm text-[10px] font-semibold text-white/50 hover:text-white uppercase tracking-widest">All Rights Reserved</div>
+</footer>
+
+<script>
+        // Simple scroll parallax for header opacity
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const scroll = window.pageYOffset;
+            header.style.opacity = Math.max(0.1, 1 - (scroll / 500));
+        });
+    </script>
+
+<script>
+/* ── Page Transitions ── */
+(function(){
+  var ov=document.createElement('div');
+  ov.className='page-fade-overlay';
+  document.body.appendChild(ov);
+  document.body.classList.add('page-loaded');
+  document.querySelectorAll('a[href]').forEach(function(link){
+    var href=link.getAttribute('href');
+    if(!href||href.charAt(0)==='#'||href.indexOf('mailto:')===0||href.indexOf('tel:')===0||href.indexOf('http')===0) return;
+    link.addEventListener('click',function(e){
+      e.preventDefault();
+      var target=link.href;
+      ov.classList.add('active');
+      setTimeout(function(){window.location.href=target;},400);
+    });
+  });
+  document.querySelectorAll('.copyright-year').forEach(function(el){
+    el.textContent=new Date().getFullYear();
+  });
+})();
+</script>
+<script>
+/* ── Unified Cursor ── */
+(function(){
+  if(window.matchMedia('(pointer:coarse)').matches || window.innerWidth<768) return;
+  if(document.querySelector('.cur-dot')) return;
+  var d=document.createElement('div'), r=document.createElement('div');
+  d.className='cur-dot'; r.className='cur-ring';
+  document.body.appendChild(d); document.body.appendChild(r);
+  var mx=0,my=0,rx=0,ry=0,visible=false;
+  document.addEventListener('mousemove',function(e){
+    mx=e.clientX; my=e.clientY;
+    d.style.left=mx+'px'; d.style.top=my+'px';
+    if(!visible){visible=true;rx=mx;ry=my;d.classList.add('on');r.classList.add('on');}
+  });
+  (function tick(){
+    rx+=(mx-rx)*0.13; ry+=(my-ry)*0.13;
+    r.style.left=Math.round(rx*10)/10+'px';
+    r.style.top=Math.round(ry*10)/10+'px';
+    requestAnimationFrame(tick);
+  })();
+  document.addEventListener('mouseleave',function(){ d.classList.remove('on'); r.classList.remove('on'); visible=false; });
+  document.addEventListener('mouseover',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){ d.classList.add('hov'); r.classList.add('hov'); }
+  });
+  document.addEventListener('mouseout',function(e){
+    if(e.target.closest('a,button,[role=button],input,select,textarea,label')){ d.classList.remove('hov'); r.classList.remove('hov'); }
+  });
+  document.addEventListener('mousedown',function(){r.classList.add('dn');});
+  document.addEventListener('mouseup',function(){r.classList.remove('dn');});
+})();
+</script>
+
+
+<script>
+/* ── Gallery click → detail.html ── */
+window.openLightbox = function (index) {
+    const ov = document.querySelector('.page-fade-overlay');
+    const dest = 'detail.html?collection=product&index=' + index;
+    if (ov) { ov.classList.add('active'); setTimeout(function(){ window.location.href = dest; }, 400); }
+    else window.location.href = dest;
+};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script type="module" src="./js/gallery.js"></script>
+</body></html>
